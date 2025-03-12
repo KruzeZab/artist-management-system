@@ -1,0 +1,3 @@
+echo "Running Prettier and Linting for Backend..."
+cd backend/
+yarn lint-staged
