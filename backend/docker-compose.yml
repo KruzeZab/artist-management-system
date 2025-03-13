@@ -1,0 +1,33 @@
+services:
+  database:
+    image: postgres:15
+    container_name: music_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: music_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  backend:
+    build: .
+    container_name: music_backend
+    restart: always
+    depends_on:
+      - database
+    ports:
+      - "8000:8000"
+    environment:
+      DB_USER: postgres
+      DB_HOST: database
+      DB_NAME: music_db
+      DB_PASSWORD: postgres
+      DB_PORT: 5432
+      NODE_ENV: production
+    command: ["sh", "-c", "node dist/index.js"]
+
+volumes:
+  pg_data:
