@@ -5,14 +5,9 @@ import dotenv from 'dotenv';
 
 import config from '../config/config';
 
-dotenv.config();
+import { dbConfig } from '../config/dbConfig';
 
-const dbConfig = {
-  user: config.database.user,
-  host: config.database.host,
-  password: config.database.password,
-  port: config.database.port,
-};
+dotenv.config();
 
 const dbName = config.database.dbName;
 

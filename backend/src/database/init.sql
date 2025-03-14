@@ -8,7 +8,7 @@ BEGIN
 END
 $$;
 
--- Create 'user' table with role column
+-- Create 'user' table
 CREATE TABLE IF NOT EXISTS "user" (
     id SERIAL PRIMARY KEY,
     first_name VARCHAR(255) NOT NULL,

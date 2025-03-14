@@ -1,7 +1,7 @@
 import http from 'http';
 
 import serverConfig from './config/config';
-import requestHandler from './handlers/requesthandler';
+import requestHandler from './handlers/requestHandler';
 
 const server = http.createServer(requestHandler);
 

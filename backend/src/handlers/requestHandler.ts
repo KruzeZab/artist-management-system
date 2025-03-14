@@ -2,8 +2,13 @@ import url from 'url';
 import { IncomingMessage, ServerResponse } from 'http';
 
 import routes from '../routes';
+
 import { GET } from '../constants/methods';
+import { protectedRoutes } from '../constants/routes';
+
 import { parseQueryParams } from '../utils/string';
+
+import { authenticate } from '../middlewares/auth';
 
 const requestHandler = (req: IncomingMessage, res: ServerResponse) => {
   const parsedURL = url.parse(req.url || '', true);
@@ -37,7 +42,11 @@ const requestHandler = (req: IncomingMessage, res: ServerResponse) => {
 
     const route = routes[path] || routes['notFound'];
 
-    route(data, res);
+    if (protectedRoutes.has(path)) {
+      authenticate(req, res, () => route(data, res));
+    } else {
+      route(data, res);
+    }
   });
 };
 
