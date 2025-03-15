@@ -7,86 +7,69 @@ import { sendResponseToClient } from '../utils/server';
 
 import AuthService from '../services/auth.service';
 
-import { POST } from '../constants/methods';
+class AuthController {
+  /**
+   * Register new user
+   *
+   */
+  static async registerUser(req: RequestData, res: ServerResponse) {
+    try {
+      const user: User = req.body;
 
-/**
- * Register new user
- *
- */
-export async function registerUser(req: RequestData, res: ServerResponse) {
-  if (req.method !== POST) {
-    return sendResponseToClient(res, HttpStatus.METHOD_NOT_ALLOWED, {
-      success: false,
-      error: 'Method not allowed',
-    });
+      const data = await AuthService.register(user);
+
+      sendResponseToClient(res, data.status, data.response);
+    } catch (error) {
+      console.error('Error handling request:', error);
+
+      sendResponseToClient(res, HttpStatus.INTERNAL_SERVER_ERROR, {
+        success: false,
+        error: 'Internal Server Error',
+      });
+    }
   }
 
-  try {
-    const user: User = req.body;
-    const data = await AuthService.register(user);
+  /**
+   * Login a user
+   *
+   */
+  static async loginUser(req: RequestData, res: ServerResponse) {
+    try {
+      const { email, password } = req.body;
 
-    sendResponseToClient(res, data.status, data.response);
-  } catch (error) {
-    console.error('Error handling request:', error);
-    sendResponseToClient(res, HttpStatus.INTERNAL_SERVER_ERROR, {
-      success: false,
-      error: 'Internal Server Error',
-    });
-  }
-}
+      const data = await AuthService.login(email, password);
 
-/**
- * Login a user
- *
- */
-export async function loginUser(req: RequestData, res: ServerResponse) {
-  if (req.method !== POST) {
-    return sendResponseToClient(res, HttpStatus.METHOD_NOT_ALLOWED, {
-      success: false,
-      error: 'Method not allowed',
-    });
+      return sendResponseToClient(res, data.status, data.response);
+    } catch (error) {
+      console.error('Error handling login request:', error);
+
+      return sendResponseToClient(res, HttpStatus.INTERNAL_SERVER_ERROR, {
+        success: false,
+        error: 'Internal server error',
+      });
+    }
   }
 
-  try {
-    const { email, password } = req.body;
+  /**
+   * Rengerate JWT Token
+   *
+   */
+  static async regenerateToken(req: RequestData, res: ServerResponse) {
+    try {
+      const { refreshToken } = req.body;
 
-    const data = await AuthService.login(email, password);
+      const data = await AuthService.regenerateToken(refreshToken);
 
-    return sendResponseToClient(res, data.status, data.response);
-  } catch (error) {
-    console.error('Error handling login request:', error);
+      return sendResponseToClient(res, data.status, data.response);
+    } catch (error) {
+      console.error('Error handling login request:', error);
 
-    return sendResponseToClient(res, HttpStatus.INTERNAL_SERVER_ERROR, {
-      success: false,
-      error: 'Internal server error',
-    });
-  }
-}
-
-/**
- * Rengerate JWT Token
- *
- */
-export async function regenerateToken(req: RequestData, res: ServerResponse) {
-  if (req.method !== POST) {
-    return sendResponseToClient(res, HttpStatus.METHOD_NOT_ALLOWED, {
-      success: false,
-      error: 'Method not allowed',
-    });
-  }
-
-  try {
-    const { refreshToken } = req.body;
-
-    const data = await AuthService.regenerateToken(refreshToken);
-
-    return sendResponseToClient(res, data.status, data.response);
-  } catch (error) {
-    console.error('Error handling login request:', error);
-
-    return sendResponseToClient(res, HttpStatus.INTERNAL_SERVER_ERROR, {
-      success: false,
-      error: 'Internal server error',
-    });
+      return sendResponseToClient(res, HttpStatus.INTERNAL_SERVER_ERROR, {
+        success: false,
+        error: 'Internal server error',
+      });
+    }
   }
 }
+
+export default AuthController;
