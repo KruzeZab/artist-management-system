@@ -16,4 +16,8 @@ export interface User {
   gender: Gender;
   address: string;
   role: Role;
+  createdAt?: string;
+  updatedAt?: string;
 }
+
+export type UpdateUser = Omit<User, 'createdAt' | 'updatedAt'>;

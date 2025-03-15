@@ -18,6 +18,7 @@ export interface RequestData {
   method: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body?: any;
+  routeParams?: Record<string, string>;
 }
 
 export type RouteHandler = (data: RequestData, res: ServerResponse) => void;

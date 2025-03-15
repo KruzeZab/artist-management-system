@@ -6,9 +6,11 @@ import routes from '../routes';
 import { GET } from '../constants/methods';
 import { protectedRoutes } from '../constants/routes';
 
+import { findRoute } from '../utils/server';
 import { parseQueryParams } from '../utils/string';
 
 import { authenticate } from '../middlewares/auth';
+import { RequestData } from '../interfaces/server';
 
 const requestHandler = (req: IncomingMessage, res: ServerResponse) => {
   const parsedURL = url.parse(req.url || '', true);
@@ -32,15 +34,17 @@ const requestHandler = (req: IncomingMessage, res: ServerResponse) => {
       parsedBody = {};
     }
 
-    const data = {
+    const data: RequestData = {
       path,
       queryString: parseQueryParams(parsedURL.query),
       headers: req.headers,
       method,
       body: parsedBody,
+      routeParams: {},
     };
 
-    const route = routes[path] || routes['notFound'];
+    const { route, params } = findRoute(path, routes);
+    data.routeParams = params;
 
     if (protectedRoutes.has(path)) {
       authenticate(req, res, () => route(data, res));
