@@ -9,17 +9,27 @@ class UserController {
    * Fetch all users
    *
    */
-  static async getAllUsers(_: RequestData, res: ServerResponse) {
+  static async getAllUsers(req: RequestData, res: ServerResponse) {
     try {
-      const data = await UserService.getAllUsers();
+      const page = parseInt(req.queryString.page as string, 10) || 1;
+      const limit = parseInt(req.queryString.limit as string, 10) || 10;
 
-      sendResponseToClient(res, data.status, data.response);
+      const { response } = await UserService.getAllUsers(page, limit);
+
+      return sendResponseToClient(res, HttpStatus.OK, {
+        success: true,
+        response: {
+          message: 'Users fetched!',
+          data: response.data,
+          meta: response.meta,
+        },
+      });
     } catch (error) {
-      console.error('Error handling request:', error);
+      console.error('Error fetching users:', error);
 
-      sendResponseToClient(res, HttpStatus.INTERNAL_SERVER_ERROR, {
+      return sendResponseToClient(res, HttpStatus.INTERNAL_SERVER_ERROR, {
         success: false,
-        error: 'Internal Server Error',
+        response: { error: 'Failed to fetch users' },
       });
     }
   }

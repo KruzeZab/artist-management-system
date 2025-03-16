@@ -2,50 +2,41 @@ import { Gender } from '../interfaces/common';
 import { User, Role, UpdateUser } from '../interfaces/user';
 
 import { EMAIL_REGEX, PASSWORD_REGEX } from '../constants/validator';
+import { Artist } from '../interfaces/artist';
 
 /**
  * Validate the body of user registration
  *
  */
-export function validateUserRegister(user: User) {
+export function validateArtistRegister(artist: Artist) {
   const errors: string[] = [];
 
-  if (!user.firstName || user.firstName.trim().length < 2) {
-    errors.push('First name must be at least 2 characters long.');
+  if (!artist.name || !artist.name.trim()) {
+    errors.push('Name must be at least 2 characters long.');
   }
 
-  if (!user.lastName || user.lastName.trim().length < 2) {
-    errors.push('Last name must be at least 2 characters long.');
-  }
-
-  if (!user.email || !EMAIL_REGEX.test(user.email)) {
-    errors.push('Invalid email format.');
-  }
-
-  if (!user.password || !PASSWORD_REGEX.test(user.password)) {
-    errors.push(
-      'Password must be greater than length 6 and must container one uppercase letter.',
-    );
-  }
-
-  if (!user.phone || !user.phone.trim()) {
-    errors.push('Phone number is required.');
-  }
-
-  if (!user.dob.trim()) {
+  if (!artist.dob.trim()) {
     errors.push('Date of birth is required.');
   }
 
-  if (!user.address || !user.address.trim()) {
+  if (!artist.noOfAlbumsReleased) {
+    errors.push('No of albums released is required.');
+  }
+
+  if (artist.noOfAlbumsReleased < 0) {
+    errors.push('Albums release cannot be negative.');
+  }
+
+  if (!artist.firstReleaseYear) {
+    errors.push('First release year is required.');
+  }
+
+  if (!artist.address || !artist.address.trim()) {
     errors.push('Address is required.');
   }
 
-  if (!user.gender || !Object.values(Gender).includes(user.gender)) {
+  if (!artist.gender || !Object.values(Gender).includes(artist.gender)) {
     errors.push("Gender must be 'm', 'f', or 'o'.");
-  }
-
-  if (!Object.values(Role).includes(user.role)) {
-    errors.push('Invalid role.');
   }
 
   return errors.length > 0 ? { success: false, errors } : { success: true };

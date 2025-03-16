@@ -1,6 +1,11 @@
+import {
+  DEFAULT_PAGE_LIMIT,
+  DEFAULT_PAGE_START,
+} from '../constants/pagiantion';
 import { HttpStatus } from '../interfaces/server';
 import { UpdateUser } from '../interfaces/user';
 import UserModel from '../model/user.model';
+import { buildMeta } from '../utils/pagination';
 import { sendApiResponse } from '../utils/server';
 import { validateUserUpdate } from '../validators/userValidator';
 
@@ -9,14 +14,23 @@ class UserService {
    * Get all users
    *
    */
-  static async getAllUsers() {
+
+  static async getAllUsers(
+    page = DEFAULT_PAGE_START,
+    limit = DEFAULT_PAGE_LIMIT,
+  ) {
     try {
-      const data = await UserModel.getAllUsers();
+      const { data, totalRecords } = await UserModel.getAllUsers(page, limit);
+      const totalPages = Math.ceil(totalRecords / limit);
 
       return sendApiResponse({
         status: HttpStatus.OK,
         success: true,
-        response: { message: 'User fetched!', data },
+        response: {
+          message: 'Users fetched successfully!',
+          data,
+          meta: buildMeta(page, limit, totalRecords, totalPages),
+        },
       });
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -24,7 +38,7 @@ class UserService {
       return sendApiResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         success: false,
-        response: { error: 'User registration failed' },
+        response: { error: 'Failed to fetch users' },
       });
     }
   }
@@ -41,7 +55,7 @@ class UserService {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
           success: false,
-          response: { message: 'User not found' },
+          response: { error: 'User not found' },
         });
       }
 
@@ -73,7 +87,7 @@ class UserService {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
           success: false,
-          response: { message: 'User not found' },
+          response: { error: 'User not found' },
         });
       }
 
@@ -85,12 +99,12 @@ class UserService {
         response: { data },
       });
     } catch (error) {
-      console.error('Error fetching users:', error);
+      console.error('Error deleting user:', error);
 
       return sendApiResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         success: false,
-        response: { error: 'Unable to update user' },
+        response: { error: 'Unable to delete user' },
       });
     }
   }

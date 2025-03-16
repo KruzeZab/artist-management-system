@@ -9,12 +9,22 @@ class UserModel {
    */
   static async createUser(user: User) {
     const query = `
-      INSERT INTO "user" (first_name, last_name, email, password, phone, dob, gender, address, role)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-      RETURNING id;
-    `;
+        INSERT INTO "user" (first_name, last_name, email, password, phone, dob, gender, address, role)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+        RETURNING id;
+`;
 
-    const values = Object.values(user);
+    const values = [
+      user.firstName,
+      user.lastName,
+      user.email,
+      user.password,
+      user.phone,
+      user.dob,
+      user.gender,
+      user.address,
+      user.role,
+    ];
 
     try {
       const result = await pool.query(query, values);
@@ -22,6 +32,7 @@ class UserModel {
       return result.rows[0];
     } catch (error) {
       console.error('Error creating user:', error);
+
       throw new Error('User creation failed');
     }
   }
@@ -32,7 +43,7 @@ class UserModel {
    */
   static async findUserByEmail(email: string) {
     const query = `
-      SELECT id, first_name, last_name, email, password, phone, dob, gender, address, role, created_at, updated_at
+      SELECT id
       FROM "user"
       WHERE email = $1;
     `;
@@ -78,18 +89,30 @@ class UserModel {
    * Get all users
    *
    */
-  static async getAllUsers() {
+  static async getAllUsers(page: number = 1, limit: number = 10) {
+    const offset = (page - 1) * limit;
+
     const query = `
       SELECT id, first_name, last_name, email, phone, dob, gender, address, role, created_at, updated_at
-      FROM "user";
+      FROM "user"
+      ORDER BY created_at DESC
+      LIMIT $1 OFFSET $2;
     `;
 
-    try {
-      const result = await pool.query(query);
+    const countQuery = `SELECT COUNT(*) FROM "user";`;
 
-      return result.rows;
+    try {
+      const [result, countResult] = await Promise.all([
+        pool.query(query, [limit, offset]),
+        pool.query(countQuery),
+      ]);
+
+      return {
+        data: result.rows,
+        totalRecords: parseInt(countResult.rows[0].count, 10),
+      };
     } catch (error) {
-      console.error('Error retrieving all users:', error);
+      console.error('Error retrieving users:', error);
 
       throw new Error('Failed to fetch users');
     }
@@ -106,9 +129,10 @@ class UserModel {
       throw new Error('No fields provided for update');
     }
 
+    // Convert camelCase keys to snake_case for PostgreSQL
     fields = fields.map(camelToSnake);
 
-    // Add updated_at field
+    // Add updated_at field to be updated
     fields.push('updated_at');
 
     const values = [...Object.values(updates), new Date(), userId];
@@ -120,7 +144,7 @@ class UserModel {
     const query = `
       UPDATE "user"
       SET ${setClause}
-      WHERE id = $${fields.length + 1}
+      WHERE id = $${values.length}
       RETURNING id;
     `;
 
