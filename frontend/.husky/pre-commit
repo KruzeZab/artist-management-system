@@ -1,1 +1,3 @@
-npm test
+echo "Running Prettier and Linting for Frontned..."
+cd frontend/
+yarn lint-staged
