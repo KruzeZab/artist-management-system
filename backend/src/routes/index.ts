@@ -6,6 +6,8 @@ import ArtistController from '../controllers/artist.controller';
 
 import { DELETE, GET, PATCH, POST } from '../constants/methods';
 import SongController from '../controllers/song.controller';
+import { checkUserPermission } from '../utils/permission';
+import { Role } from '../interfaces/user';
 
 const routes: Record<string, RouteHandler> = {
   'users/register': (req, res) => {
@@ -20,55 +22,95 @@ const routes: Record<string, RouteHandler> = {
   },
   users: (req, res) => {
     if (req.method === GET) {
-      UserController.getAllUsers(req, res);
+      checkUserPermission(res, req.user.role, [Role.SUPER_ADMIN], () =>
+        UserController.getAllUsers(req, res),
+      );
     }
   },
   'users/:id': (req, res) => {
     if (req.method === GET) {
-      UserController.getUser(req, res);
+      checkUserPermission(res, req.user.role, [Role.SUPER_ADMIN], () =>
+        UserController.getUser(req, res),
+      );
     } else if (req.method === PATCH) {
-      UserController.updateUser(req, res);
+      checkUserPermission(res, req.user.role, [Role.SUPER_ADMIN], () =>
+        UserController.updateUser(req, res),
+      );
     } else if (req.method === DELETE) {
-      UserController.deleteUser(req, res);
+      checkUserPermission(res, req.user.role, [Role.SUPER_ADMIN], () =>
+        UserController.deleteUser(req, res),
+      );
     }
   },
   'artists/create': (req, res) => {
     if (req.method === POST) {
-      ArtistController.registerArtist(req, res);
+      checkUserPermission(res, req.user.role, [Role.ARTIST_MANAGER], () =>
+        ArtistController.registerArtist(req, res),
+      );
     }
   },
   artists: (req, res) => {
     if (req.method === GET) {
-      ArtistController.getAllArtists(req, res);
+      checkUserPermission(
+        res,
+        req.user.role,
+        [Role.SUPER_ADMIN, Role.ARTIST_MANAGER],
+        () => ArtistController.getAllArtists(req, res),
+      );
     }
   },
   'artists/:id': (req, res) => {
     if (req.method === GET) {
-      ArtistController.getArtist(req, res);
+      checkUserPermission(
+        res,
+        req.user.role,
+        [Role.SUPER_ADMIN, Role.ARTIST_MANAGER],
+        () => ArtistController.getArtist(req, res),
+      );
     } else if (req.method === PATCH) {
-      ArtistController.updateArtist(req, res);
+      checkUserPermission(res, req.user.role, [Role.ARTIST_MANAGER], () =>
+        ArtistController.updateArtist(req, res),
+      );
     } else if (req.method === DELETE) {
-      ArtistController.deleteArtist(req, res);
+      checkUserPermission(res, req.user.role, [Role.ARTIST_MANAGER], () =>
+        ArtistController.deleteArtist(req, res),
+      );
     }
   },
 
   'artists/:artistId/songs/create': (req, res) => {
     if (req.method === POST) {
-      SongController.registerSong(req, res);
+      checkUserPermission(res, req.user.role, [Role.ARTIST], () =>
+        SongController.registerSong(req, res),
+      );
     }
   },
   'artists/:artistId/songs': (req, res) => {
     if (req.method === GET) {
-      SongController.getAllSongs(req, res);
+      checkUserPermission(
+        res,
+        req.user.role,
+        [Role.SUPER_ADMIN, Role.ARTIST_MANAGER, Role.ARTIST],
+        () => SongController.getAllSongs(req, res),
+      );
     }
   },
   'artists/:artistId/songs/:songId': (req, res) => {
     if (req.method === GET) {
-      SongController.getSong(req, res);
+      checkUserPermission(
+        res,
+        req.user.role,
+        [Role.SUPER_ADMIN, Role.ARTIST_MANAGER, Role.ARTIST],
+        () => SongController.getSong(req, res),
+      );
     } else if (req.method === PATCH) {
-      SongController.updateSong(req, res);
+      checkUserPermission(res, req.user.role, [Role.ARTIST], () =>
+        SongController.updateSong(req, res),
+      );
     } else if (req.method === DELETE) {
-      SongController.deleteSong(req, res);
+      checkUserPermission(res, req.user.role, [Role.ARTIST], () =>
+        SongController.deleteSong(req, res),
+      );
     }
   },
 
