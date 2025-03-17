@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import { IncomingMessage, ServerResponse } from 'http';
 
 import { sendResponseToClient } from '../utils/server';
@@ -15,7 +15,7 @@ import { HttpStatus } from '../interfaces/server';
 export function authenticate(
   req: IncomingMessage,
   res: ServerResponse,
-  next: () => void,
+  next: (_: string | JwtPayload) => void,
 ) {
   const token = req.headers.authorization?.split(' ')[1] as string;
 
@@ -29,10 +29,7 @@ export function authenticate(
   try {
     const user = jwt.verify(token, serverConfig.jwt.accessToken);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (req as any).user = user;
-
-    next();
+    next(user);
   } catch {
     return sendResponseToClient(res, HttpStatus.UNAUTHORIZED, {
       success: false,

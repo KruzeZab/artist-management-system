@@ -18,6 +18,8 @@ export interface RequestData {
   method: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  user: any;
   routeParams?: Record<string, string>;
 }
 

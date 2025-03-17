@@ -15,7 +15,7 @@ export function validateArtistRegister(artist: Artist) {
     errors.push('Name must be at least 2 characters long.');
   }
 
-  if (!artist.dob.trim()) {
+  if (!artist.dob) {
     errors.push('Date of birth is required.');
   }
 
@@ -27,7 +27,7 @@ export function validateArtistRegister(artist: Artist) {
     errors.push('Albums release cannot be negative.');
   }
 
-  if (!artist.firstReleaseYear) {
+  if (!artist.firstReleaseYear || !artist.firstReleaseYear.trim()) {
     errors.push('First release year is required.');
   }
 

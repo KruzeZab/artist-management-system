@@ -32,7 +32,7 @@ export function validateUserRegister(user: User) {
     errors.push('Phone number is required.');
   }
 
-  if (!user.dob.trim()) {
+  if (!user.dob) {
     errors.push('Date of birth is required.');
   }
 
@@ -44,7 +44,7 @@ export function validateUserRegister(user: User) {
     errors.push("Gender must be 'm', 'f', or 'o'.");
   }
 
-  if (!Object.values(Role).includes(user.role)) {
+  if (!user.role || !Object.values(Role).includes(user.role)) {
     errors.push('Invalid role.');
   }
 
@@ -84,41 +84,41 @@ export function validateUserLogin(user: Pick<User, 'email' | 'password'>) {
 export function validateUserUpdate(user: UpdateUser) {
   const errors: string[] = [];
 
-  if (user.firstName && user.firstName.trim().length < 2) {
+  if (user.firstName || user.firstName.trim().length < 2) {
     errors.push('First name must be at least 2 characters long.');
   }
 
-  if (user.lastName && user.lastName.trim().length < 2) {
+  if (user.lastName || user.lastName.trim().length < 2) {
     errors.push('Last name must be at least 2 characters long.');
   }
 
-  if (user.email && !EMAIL_REGEX.test(user.email)) {
+  if (user.email || !EMAIL_REGEX.test(user.email)) {
     errors.push('Invalid email format.');
   }
 
-  if (user.password && !PASSWORD_REGEX.test(user.password)) {
+  if (user.password || !PASSWORD_REGEX.test(user.password)) {
     errors.push(
       'Password must be greater than length 6 and must container one uppercase letter.',
     );
   }
 
-  if (user.phone && !user.phone.trim()) {
+  if (user.phone || !user.phone.trim()) {
     errors.push('Phone number is empty.');
   }
 
-  if (user.dob && !user.dob.trim()) {
+  if (user.dob || !user.dob.trim()) {
     errors.push('Date of birth is empty.');
   }
 
-  if (user.address && !user.address.trim()) {
+  if (user.address || !user.address.trim()) {
     errors.push('Address is empty.');
   }
 
-  if (user.gender && !Object.values(Gender).includes(user.gender)) {
+  if (user.gender || !Object.values(Gender).includes(user.gender)) {
     errors.push("Gender must be 'm', 'f', or 'o'.");
   }
 
-  if (user.role && !Object.values(Role).includes(user.role)) {
+  if (user.role || !Object.values(Role).includes(user.role)) {
     errors.push('Invalid role.');
   }
 

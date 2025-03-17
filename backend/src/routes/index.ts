@@ -5,6 +5,7 @@ import UserController from '../controllers/user.controller';
 import ArtistController from '../controllers/artist.controller';
 
 import { DELETE, GET, PATCH, POST } from '../constants/methods';
+import SongController from '../controllers/song.controller';
 
 const routes: Record<string, RouteHandler> = {
   'users/register': (req, res) => {
@@ -48,6 +49,26 @@ const routes: Record<string, RouteHandler> = {
       ArtistController.updateArtist(req, res);
     } else if (req.method === DELETE) {
       ArtistController.deleteArtist(req, res);
+    }
+  },
+
+  'artists/:artistId/songs/create': (req, res) => {
+    if (req.method === POST) {
+      SongController.registerSong(req, res);
+    }
+  },
+  'artists/:artistId/songs': (req, res) => {
+    if (req.method === GET) {
+      SongController.getAllSongs(req, res);
+    }
+  },
+  'artists/:artistId/songs/:songId': (req, res) => {
+    if (req.method === GET) {
+      SongController.getSong(req, res);
+    } else if (req.method === PATCH) {
+      SongController.updateSong(req, res);
+    } else if (req.method === DELETE) {
+      SongController.deleteSong(req, res);
     }
   },
 

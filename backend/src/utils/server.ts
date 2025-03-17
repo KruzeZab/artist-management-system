@@ -4,6 +4,8 @@ import { HttpStatus, RouteHandler } from '../interfaces/server';
 import {
   DYNAMIC_ROUTE_PARAM_REGEX,
   DYNAMIC_ROUTE_REPLACE_REGEX,
+  protectedRoutes,
+  publicRoutes,
 } from '../constants/routes';
 
 /**
@@ -79,4 +81,27 @@ export const findRoute = (
   }
 
   return { route: route || routes['notFound'], params };
+};
+
+/**
+ * Check if the url is protected route
+ *
+ */
+export const isProtectedRoute = (path: string) => {
+  if (publicRoutes.includes(path)) {
+    return false;
+  }
+
+  return protectedRoutes.some((protectedPath) => {
+    const protectedSegments = protectedPath.split('/');
+    const pathSegments = path.split('/');
+
+    if (protectedSegments.length !== pathSegments.length) {
+      return false;
+    }
+
+    return protectedSegments.every(
+      (seg, i) => seg.startsWith(':') || seg === pathSegments[i],
+    );
+  });
 };

@@ -4,12 +4,12 @@ import { IncomingMessage, ServerResponse } from 'http';
 import routes from '../routes';
 
 import { GET } from '../constants/methods';
-import { protectedRoutes } from '../constants/routes';
 
-import { findRoute } from '../utils/server';
 import { parseQueryParams } from '../utils/string';
+import { findRoute, isProtectedRoute } from '../utils/server';
 
 import { authenticate } from '../middlewares/auth';
+
 import { RequestData } from '../interfaces/server';
 
 const requestHandler = (req: IncomingMessage, res: ServerResponse) => {
@@ -41,13 +41,18 @@ const requestHandler = (req: IncomingMessage, res: ServerResponse) => {
       method,
       body: parsedBody,
       routeParams: {},
+      user: {},
     };
 
     const { route, params } = findRoute(path, routes);
     data.routeParams = params;
 
-    if (protectedRoutes.has(path)) {
-      authenticate(req, res, () => route(data, res));
+    if (isProtectedRoute(path)) {
+      authenticate(req, res, (user) => {
+        data.user = user;
+
+        route(data, res);
+      });
     } else {
       route(data, res);
     }

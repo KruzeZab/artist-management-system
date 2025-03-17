@@ -43,7 +43,7 @@ class UserModel {
    */
   static async findUserByEmail(email: string) {
     const query = `
-      SELECT id
+      SELECT id, first_name, last_name, email, password
       FROM "user"
       WHERE email = $1;
     `;
