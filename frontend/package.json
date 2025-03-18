@@ -18,7 +18,10 @@
   "lint-staged": {
     "./src/**/*.ts": [
       "yarn prettify",
-      "yarn lint:fix",
+      "yarn lint:fix"
+    ],
+    "./src/**/*.css": [
+      "yarn prettify",
       "yarn stylelint:fix"
     ],
     ".src/**/*.test.ts": [
