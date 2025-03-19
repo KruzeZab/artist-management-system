@@ -6,6 +6,8 @@
   --radius: 4px;
   --bg-grey: #e2e2e5;
   --input-border: #c9c9c9;
+  --danger: #cc1b1b;
+  --danger-hover: #b91c1c;
   --brand-primary: #2b4141;
   --brand-secondary: #0eb1d2;
   --brand-tertiary: #34e4ea;
@@ -41,12 +43,30 @@ img {
   display: block;
 }
 
-button {
+.btn {
   border: 0;
   transition: var(--transit);
   font-size: 1.6rem;
   cursor: pointer;
   border-radius: var(--radius);
+}
+
+.btn-primary {
+  background-color: var(--brand-secondary);
+  color: var(--white);
+}
+
+.btn-primary:hover {
+  background-color: var(--secondary-hover);
+}
+
+.btn-danger {
+  background-color: var(--danger);
+  color: var(--white);
+}
+
+.btn-danger:hover {
+  background-color: var(--danger-hover);
 }
 
 .form-control {
@@ -62,4 +82,14 @@ button {
 
 .form-control:focus {
   border-color: var(--secondary-hover);
+}
+
+.container {
+  width: 90%;
+  background-color: var(--white);
+  margin: 0 auto;
+}
+
+.page-title {
+  font-size: 2.4rem;
 }

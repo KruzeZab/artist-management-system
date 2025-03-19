@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="stylesheet" href="/src/css/pages/user-detail.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Artist Management System</title>
+  </head>
+  <body>
+    <div id="app">
+      <header></header>
+      <div class="container">
+        <div class="page-header user-detail-header">
+          <h2 class="page-title page-header__title">
+            Kaushal Bhattarai's Detail
+          </h2>
+        </div>
+
+        <!-- All user detail here -->
+        <section class="user-detail">
+          <div class="user-detail__info">
+            <p>Full Name: <strong>Kaushal Bhattarai</strong></p>
+            <p>Gender: <strong>Male</strong></p>
+            <p>Role: <strong>Artist</strong></p>
+            <p>Full Name: <strong>Kaushal Bhattarai</strong></p>
+            <p>Full Name: <strong>Kaushal Bhattarai</strong></p>
+            <p>Full Name: <strong>Kaushal Bhattarai</strong></p>
+            <p>Full Name: <strong>Kaushal Bhattarai</strong></p>
+            <p>Full Name: <strong>Kaushal Bhattarai</strong></p>
+            <p>Full Name: <strong>Kaushal Bhattarai</strong></p>
+          </div>
+
+          <!-- User Detail  CTA -->
+          <div class="user-detail__cta">
+            <!-- Edit Btn -->
+            <a href="#" class="btn btn-primary">Edit</a>
+            <!-- Delete Btn -->
+            <a href="#" class="btn btn-danger">Delete</a>
+          </div>
+        </section>
+      </div>
+
+      <!-- Modal -->
+      <div class="modal-wrapper" id="modal">
+        <div class="modal">
+          <div class="modal__header">
+            <h2 class="modal__header-title">Edit Modal</h2>
+            <div>
+              <button type="button" class="modal__close">X</button>
+            </div>
+          </div>
+          <div class="modal__body">
+            <p class="modal__body-text">
+              Are you sure you want to perform this action?
+            </p>
+          </div>
+          <div class="modal__footer">
+            <button class="btn btn-primary" type="button">Edit</button>
+            <button class="btn btn-primary" type="button">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <footer></footer>
+    </div>
+    <script type="module" src="/src/scripts/main.ts"></script>
+    <script type="module" src="/src/scripts/pages/userDetail.ts"></script>
+  </body>
+</html>

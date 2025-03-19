@@ -1,0 +1,36 @@
+.user-detail-header {
+  border-bottom: 1px solid var(--bg-grey);
+}
+
+.user-detail {
+  padding: 1rem;
+  font-size: 1.6rem;
+}
+
+.user-detail__info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--bg-grey);
+}
+
+.user-detail__info p {
+  color: rgb(58 58 58);
+}
+
+.user-detail__info strong {
+  color: var(--dark);
+}
+
+.user-detail__cta {
+  padding-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-detail__cta a {
+  padding: 0.6rem 1rem;
+}

@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signup User | Artist Management System</title>
+    <link rel="stylesheet" href="/src/css/pages/login.css" />
+  </head>
+  <body>
+    <div class="auth-wrapper">
+      <form class="auth-form" method="POST">
+        <h2 class="auth-title">Artist Management System</h2>
+        <div class="auth-form__nested">
+          <!-- First Name -->
+          <div class="auth-form__group">
+            <label class="auth-form__group-label" for="email">First Name</label>
+            <input
+              type="text"
+              name="fname"
+              autofocus
+              id="fname"
+              class="form-control"
+            />
+          </div>
+
+          <!-- Last Name -->
+          <div class="auth-form__group">
+            <label class="auth-form__group-label" for="lname">Last Name</label>
+            <input type="text" name="email" id="lname" class="form-control" />
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="auth-form__group">
+          <label class="auth-form__group-label" for="email">Email</label>
+          <input
+            type="text"
+            name="email"
+            id="email"
+            class="form-control"
+            autofocus
+          />
+        </div>
+
+        <!-- Password -->
+        <div class="auth-form__group">
+          <label class="auth-form__group-label" for="password">Password</label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            class="form-control"
+          />
+        </div>
+
+        <div class="auth-form__nested">
+          <!-- Phone -->
+          <div class="auth-form__group">
+            <label class="auth-form__group-label" for="password"
+              >Phone Number (+977)</label
+            >
+            <input type="number" name="phone" id="phone" class="form-control" />
+          </div>
+
+          <!-- DOB -->
+          <div class="auth-form__group">
+            <label class="auth-form__group-label" for="password"
+              >Date of Birth (AD)</label
+            >
+            <input type="date" name="dob" id="dob" class="form-control" />
+          </div>
+        </div>
+
+        <div class="auth-form__nested">
+          <!-- Gender -->
+          <div class="auth-form__group">
+            <label class="auth-form__group-label" for="password">Gender</label>
+            <select name="gender" id="gender" class="form-control">
+              <option value="m">Male</option>
+              <option value="f">Female</option>
+              <option value="o">Others</option>
+            </select>
+          </div>
+
+          <!-- Address -->
+          <div class="auth-form__group">
+            <label class="auth-form__group-label" for="password">Address</label>
+            <input
+              type="text"
+              name="address"
+              id="address"
+              class="form-control"
+            />
+          </div>
+        </div>
+
+        <!-- Role -->
+        <div class="auth-form__group">
+          <label class="auth-form__group-label" for="role">Role</label>
+          <select name="role" id="role" class="form-control">
+            <option value="super_admin">Super Admin</option>
+            <option value="artist_manager">Artist Manager</option>
+            <option value="artist">Artist</option>
+          </select>
+        </div>
+
+        <!-- Submit Button -->
+        <button class="btn btn-primarry auth-form__cta" type="submit">
+          Signup
+        </button>
+      </form>
+    </div>
+    <script type="module" src="/src/scripts/main.ts"></script>
+    <script type="module" src="/src/scripts/pages/register.ts"></script>
+  </body>
+</html>

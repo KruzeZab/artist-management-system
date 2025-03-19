@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login User | Artist Management System</title>
+    <link rel="stylesheet" href="/src/css/pages/login.css" />
+  </head>
+  <body>
+    <div class="auth-wrapper">
+      <form class="auth-form" method="POST">
+        <h2 class="auth-title">Artist Management System</h2>
+        <!-- Email -->
+        <div class="auth-form__group">
+          <label class="auth-form__group-label" for="email">Email</label>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            class="form-control"
+            autofocus
+          />
+        </div>
+
+        <!-- Password -->
+        <div class="auth-form__group">
+          <label class="auth-form__group-label" for="password">Password</label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            class="form-control"
+          />
+        </div>
+
+        <!-- Submit Button -->
+        <button class="btn btn-primary" type="submit">Login</button>
+      </form>
+      <div id="modal-wrapper"></div>
+    </div>
+    <script type="module" src="/src/scripts/main.ts"></script>
+    <script type="module" src="/src/scripts/pages/login.ts"></script>
+  </body>
+</html>
