@@ -6,7 +6,7 @@ import routes from '../routes';
 import { GET } from '../constants/methods';
 
 import { parseQueryParams } from '../utils/string';
-import { findRoute, isProtectedRoute } from '../utils/server';
+import { findRoute, handleCors, isProtectedRoute } from '../utils/server';
 
 import { authenticate } from '../middlewares/auth';
 
@@ -17,6 +17,8 @@ const requestHandler = (req: IncomingMessage, res: ServerResponse) => {
   const path = parsedURL.pathname?.replace(/^\/+|\/+$/g, '') || '';
 
   const method = req.method?.toLowerCase() || GET;
+
+  handleCors(req, res);
 
   let body = '';
 

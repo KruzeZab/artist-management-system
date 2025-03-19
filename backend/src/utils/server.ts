@@ -1,4 +1,4 @@
-import { ServerResponse } from 'http';
+import { IncomingMessage, ServerResponse } from 'http';
 
 import { HttpStatus, RouteHandler } from '../interfaces/server';
 import {
@@ -104,4 +104,27 @@ export const isProtectedRoute = (path: string) => {
       (seg, i) => seg.startsWith(':') || seg === pathSegments[i],
     );
   });
+};
+
+/**
+ * Handle Cors for browser requests
+ *
+ */
+export const handleCors = (req: IncomingMessage, res: ServerResponse) => {
+  const origin = req.headers.origin || '';
+
+  // Set CORS headers
+  res.setHeader('Access-Control-Allow-Origin', origin);
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PATCH, DELETE, PUT, OPTIONS',
+  );
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+
+  // If it's an OPTIONS request, respond immediately
+  if (req.method === 'OPTIONS') {
+    res.writeHead(200);
+    return res.end();
+  }
 };

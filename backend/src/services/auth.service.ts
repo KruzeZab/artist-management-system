@@ -40,7 +40,7 @@ class AuthService {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
           success: false,
-          response: { error: 'User already exists with this email' },
+          response: { message: 'User already exists with this email' },
         });
       }
 
@@ -71,7 +71,7 @@ class AuthService {
       return sendApiResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         success: false,
-        response: { error: 'User registration failed' },
+        response: { message: 'User registration failed' },
       });
     }
   }
@@ -98,7 +98,7 @@ class AuthService {
         return sendApiResponse({
           status: HttpStatus.UNAUTHORIZED,
           success: false,
-          response: { error: 'Invalid email or password' },
+          response: { message: 'Invalid email or password' },
         });
       }
 
@@ -108,7 +108,7 @@ class AuthService {
         return sendApiResponse({
           status: HttpStatus.UNAUTHORIZED,
           success: false,
-          response: { error: 'Invalid email or password' },
+          response: { message: 'Invalid email or password' },
         });
       }
 
@@ -143,7 +143,7 @@ class AuthService {
       return sendApiResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         success: false,
-        response: { error: 'Login failed' },
+        response: { message: 'Login failed' },
       });
     }
   }
@@ -182,7 +182,7 @@ class AuthService {
       return sendApiResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         success: false,
-        response: { error: 'Error generating token!' },
+        response: { message: 'Error generating token!' },
       });
     }
   }

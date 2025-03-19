@@ -51,7 +51,7 @@ class ArtistController {
 
       return sendResponseToClient(res, HttpStatus.INTERNAL_SERVER_ERROR, {
         success: false,
-        response: { error: 'Failed to fetch artists' },
+        response: { message: 'Failed to fetch artists' },
       });
     }
   }

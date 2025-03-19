@@ -38,7 +38,7 @@ class UserService {
       return sendApiResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         success: false,
-        response: { error: 'Failed to fetch users' },
+        response: { message: 'Failed to fetch users' },
       });
     }
   }
@@ -55,7 +55,7 @@ class UserService {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
           success: false,
-          response: { error: 'User not found' },
+          response: { message: 'User not found' },
         });
       }
 
@@ -70,7 +70,7 @@ class UserService {
       return sendApiResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         success: false,
-        response: { error: 'Unable to update user' },
+        response: { message: 'Unable to update user' },
       });
     }
   }
@@ -87,7 +87,7 @@ class UserService {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
           success: false,
-          response: { error: 'User not found' },
+          response: { message: 'User not found' },
         });
       }
 
@@ -104,7 +104,7 @@ class UserService {
       return sendApiResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         success: false,
-        response: { error: 'Unable to delete user' },
+        response: { message: 'Unable to delete user' },
       });
     }
   }
@@ -148,7 +148,7 @@ class UserService {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
           success: false,
-          response: { error: 'User not found' },
+          response: { message: 'User not found' },
         });
       }
 
@@ -160,7 +160,7 @@ class UserService {
           return sendApiResponse({
             status: HttpStatus.BAD_REQUEST,
             success: false,
-            response: { error: 'User with this email already exists.' },
+            response: { message: 'User with this email already exists.' },
           });
         }
       }
@@ -178,7 +178,7 @@ class UserService {
       return sendApiResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         success: false,
-        response: { error: 'Unable to update user' },
+        response: { message: 'Unable to update user' },
       });
     }
   }

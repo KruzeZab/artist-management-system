@@ -50,7 +50,7 @@ class SongService {
       return sendApiResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         success: false,
-        response: { error: 'Unable to create song' },
+        response: { message: 'Unable to create song' },
       });
     }
   }
@@ -83,7 +83,7 @@ class SongService {
       return sendApiResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         success: false,
-        response: { error: 'Failed to fetch songs' },
+        response: { message: 'Failed to fetch songs' },
       });
     }
   }
@@ -100,7 +100,7 @@ class SongService {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
           success: false,
-          response: { error: 'Song not found' },
+          response: { message: 'Song not found' },
         });
       }
 
@@ -115,7 +115,7 @@ class SongService {
       return sendApiResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         success: false,
-        response: { error: 'Unable to update song' },
+        response: { message: 'Unable to update song' },
       });
     }
   }
@@ -132,7 +132,7 @@ class SongService {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
           success: false,
-          response: { error: 'Song not found' },
+          response: { message: 'Song not found' },
         });
       }
 
@@ -149,7 +149,7 @@ class SongService {
       return sendApiResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         success: false,
-        response: { error: 'Unable to delete song' },
+        response: { message: 'Unable to delete song' },
       });
     }
   }
@@ -183,7 +183,7 @@ class SongService {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
           success: false,
-          response: { error: 'Song not found' },
+          response: { message: 'Song not found' },
         });
       }
 
@@ -200,7 +200,7 @@ class SongService {
       return sendApiResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         success: false,
-        response: { error: 'Unable to update song' },
+        response: { message: 'Unable to update song' },
       });
     }
   }

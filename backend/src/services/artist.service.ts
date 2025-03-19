@@ -47,7 +47,7 @@ class ArtistService {
       return sendApiResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         success: false,
-        response: { error: 'Unable to create artist' },
+        response: { message: 'Unable to create artist' },
       });
     }
   }
@@ -83,7 +83,7 @@ class ArtistService {
       return sendApiResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         success: false,
-        response: { error: 'Failed to fetch artists' },
+        response: { message: 'Failed to fetch artists' },
       });
     }
   }
@@ -100,7 +100,7 @@ class ArtistService {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
           success: false,
-          response: { error: 'Artist not found' },
+          response: { message: 'Artist not found' },
         });
       }
 
@@ -115,7 +115,7 @@ class ArtistService {
       return sendApiResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         success: false,
-        response: { error: 'Unable to update artist' },
+        response: { message: 'Unable to update artist' },
       });
     }
   }
@@ -132,7 +132,7 @@ class ArtistService {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
           success: false,
-          response: { error: 'Artist not found' },
+          response: { message: 'Artist not found' },
         });
       }
 
@@ -149,7 +149,7 @@ class ArtistService {
       return sendApiResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         success: false,
-        response: { error: 'Unable to delete artist' },
+        response: { message: 'Unable to delete artist' },
       });
     }
   }
@@ -183,7 +183,7 @@ class ArtistService {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
           success: false,
-          response: { error: 'Artist not found' },
+          response: { message: 'Artist not found' },
         });
       }
 
@@ -200,7 +200,7 @@ class ArtistService {
       return sendApiResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         success: false,
-        response: { error: 'Unable to update artist' },
+        response: { message: 'Unable to update artist' },
       });
     }
   }

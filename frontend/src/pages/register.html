@@ -8,8 +8,9 @@
   </head>
   <body>
     <div class="auth-wrapper">
-      <form class="auth-form" method="POST">
+      <form id="register-form" class="auth-form" method="POST">
         <h2 class="auth-title">Artist Management System</h2>
+        <p id="main-form-error"></p>
         <div class="auth-form__nested">
           <!-- First Name -->
           <div class="auth-form__group">
@@ -21,12 +22,14 @@
               id="fname"
               class="form-control"
             />
+            <div id="fname-error" class="form-error"></div>
           </div>
 
           <!-- Last Name -->
           <div class="auth-form__group">
             <label class="auth-form__group-label" for="lname">Last Name</label>
-            <input type="text" name="email" id="lname" class="form-control" />
+            <input type="text" name="lname" id="lname" class="form-control" />
+            <div id="lname-error" class="form-error"></div>
           </div>
         </div>
 
@@ -40,6 +43,7 @@
             class="form-control"
             autofocus
           />
+          <div id="email-error" class="form-error"></div>
         </div>
 
         <!-- Password -->
@@ -51,6 +55,7 @@
             id="password"
             class="form-control"
           />
+          <div id="password-error" class="form-error"></div>
         </div>
 
         <div class="auth-form__nested">
@@ -60,6 +65,7 @@
               >Phone Number (+977)</label
             >
             <input type="number" name="phone" id="phone" class="form-control" />
+            <div id="phone-error" class="form-error"></div>
           </div>
 
           <!-- DOB -->
@@ -68,6 +74,7 @@
               >Date of Birth (AD)</label
             >
             <input type="date" name="dob" id="dob" class="form-control" />
+            <div id="dob-error" class="form-error"></div>
           </div>
         </div>
 
@@ -80,6 +87,7 @@
               <option value="f">Female</option>
               <option value="o">Others</option>
             </select>
+            <div id="gender-error" class="form-error"></div>
           </div>
 
           <!-- Address -->
@@ -91,6 +99,7 @@
               id="address"
               class="form-control"
             />
+            <div id="address-error" class="form-error"></div>
           </div>
         </div>
 
@@ -102,10 +111,15 @@
             <option value="artist_manager">Artist Manager</option>
             <option value="artist">Artist</option>
           </select>
+          <div id="role-error" class="form-error"></div>
         </div>
 
         <!-- Submit Button -->
-        <button class="btn btn-primarry auth-form__cta" type="submit">
+        <button
+          class="btn btn-primary auth-form__cta"
+          id="register-button"
+          type="submit"
+        >
           Signup
         </button>
       </form>

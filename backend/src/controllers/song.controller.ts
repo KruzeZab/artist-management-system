@@ -57,7 +57,7 @@ class SongController {
 
       return sendResponseToClient(res, HttpStatus.INTERNAL_SERVER_ERROR, {
         success: false,
-        response: { error: 'Failed to fetch songs' },
+        response: { message: 'Failed to fetch songs' },
       });
     }
   }

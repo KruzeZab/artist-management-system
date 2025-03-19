@@ -11,6 +11,7 @@ import { Role } from '../interfaces/user';
 
 const routes: Record<string, RouteHandler> = {
   'users/register': (req, res) => {
+    console.log(req, 'method');
     if (req.method === POST) {
       AuthController.registerUser(req, res);
     }
@@ -116,7 +117,7 @@ const routes: Record<string, RouteHandler> = {
 
   notFound: (_, res) => {
     res.writeHead(404, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ error: 'Route Not Found' }));
+    res.end(JSON.stringify({ message: 'Route Not Found' }));
   },
 };
 

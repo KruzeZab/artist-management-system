@@ -69,6 +69,10 @@ img {
   background-color: var(--danger-hover);
 }
 
+.btn-muted {
+  background: var(--bg-grey);
+}
+
 .form-control {
   outline: 0;
   font-family: inherit;

@@ -9,7 +9,8 @@ thead {
   color: rgb(102 102 102);
 }
 
-th {
+th,
+td {
   border-top: 1px solid var(--bg-grey);
   text-align: left;
   padding: 1rem;
@@ -74,4 +75,17 @@ th {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
+}
+
+.form-error {
+  color: red;
+  font-size: 1rem;
+  margin-top: 0.2rem;
+}
+
+#main-form-error {
+  color: red;
+  font-size: 1.2rem;
+  text-align: center;
+  display: none;
 }
