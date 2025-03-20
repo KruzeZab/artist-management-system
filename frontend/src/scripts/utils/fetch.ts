@@ -1,16 +1,23 @@
 import { GET } from '../../constants/methods';
+import { AUTH } from '../../constants/application';
+
+import { getItem } from './localStorage';
 
 export async function fetchAPI<T>(
   url: string,
   method: string = GET,
   body: unknown = null,
-  authToken: string | null = null,
+  authenticate = false,
 ) {
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
   };
 
-  if (authToken) {
+  const localAuth = getItem(AUTH);
+
+  const authToken = localAuth ? JSON.parse(localAuth)?.token : null;
+
+  if (authenticate && authToken) {
     headers['Authorization'] = `Bearer ${authToken}`;
   }
 
@@ -26,7 +33,6 @@ export async function fetchAPI<T>(
     const data: T = await response.json();
 
     if (!response.ok) {
-       
       return data;
     }
 

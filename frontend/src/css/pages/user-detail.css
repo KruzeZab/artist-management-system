@@ -1,5 +1,6 @@
 .user-detail-header {
   border-bottom: 1px solid var(--bg-grey);
+  padding-left: 1rem;
 }
 
 .user-detail {
@@ -21,6 +22,11 @@
 
 .user-detail__info strong {
   color: var(--dark);
+  font-weight: 600;
+}
+
+#user-delete {
+  padding: 1rem;
 }
 
 .user-detail__cta {

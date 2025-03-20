@@ -11,7 +11,6 @@ import { Role } from '../interfaces/user';
 
 const routes: Record<string, RouteHandler> = {
   'users/register': (req, res) => {
-    console.log(req, 'method');
     if (req.method === POST) {
       AuthController.registerUser(req, res);
     }

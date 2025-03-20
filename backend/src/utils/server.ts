@@ -7,6 +7,7 @@ import {
   protectedRoutes,
   publicRoutes,
 } from '../constants/routes';
+import { snakeToCamel } from './common';
 
 /**
  * Handles sending response to client
@@ -18,7 +19,7 @@ export const sendResponseToClient = (
   data: unknown,
 ) => {
   res.writeHead(statusCode, { 'Content-Type': 'application/json' });
-  res.end(JSON.stringify(data));
+  res.end(JSON.stringify(snakeToCamel(data)));
 };
 
 /**

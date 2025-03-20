@@ -16,8 +16,10 @@ export interface User {
   gender: Gender;
   address: string;
   role: Role;
+  token?: string;
+  expiryTime?: string;
   createdAt?: string;
   updatedAt?: string;
 }
 
-export type UpdateUser = Omit<User, 'createdAt' | 'updatedAt'>;
+export type UpdateUser = Partial<User>;

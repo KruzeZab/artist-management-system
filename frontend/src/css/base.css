@@ -12,6 +12,7 @@
   --brand-secondary: #0eb1d2;
   --brand-tertiary: #34e4ea;
   --secondary-hover: #0b9cb9;
+  --disabled: #c3c3c3;
   --transit: all 0.2s linear;
 }
 
@@ -58,6 +59,10 @@ img {
 
 .btn-primary:hover {
   background-color: var(--secondary-hover);
+}
+
+.btn-primary:disabled {
+  background-color: var(--disabled);
 }
 
 .btn-danger {

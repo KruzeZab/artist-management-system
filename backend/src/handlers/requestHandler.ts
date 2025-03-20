@@ -6,11 +6,16 @@ import routes from '../routes';
 import { GET } from '../constants/methods';
 
 import { parseQueryParams } from '../utils/string';
-import { findRoute, handleCors, isProtectedRoute } from '../utils/server';
+import {
+  findRoute,
+  handleCors,
+  isProtectedRoute,
+  sendResponseToClient,
+} from '../utils/server';
 
 import { authenticate } from '../middlewares/auth';
 
-import { RequestData } from '../interfaces/server';
+import { HttpStatus, RequestData } from '../interfaces/server';
 
 const requestHandler = (req: IncomingMessage, res: ServerResponse) => {
   const parsedURL = url.parse(req.url || '', true);
@@ -52,6 +57,12 @@ const requestHandler = (req: IncomingMessage, res: ServerResponse) => {
     if (isProtectedRoute(path)) {
       authenticate(req, res, (user) => {
         data.user = user;
+
+        if (!user) {
+          return sendResponseToClient(res, HttpStatus.UNAUTHORIZED, {
+            message: 'No Token',
+          });
+        }
 
         route(data, res);
       });

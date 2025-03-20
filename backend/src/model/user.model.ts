@@ -1,4 +1,8 @@
 import { pool } from '../config/dbConfig';
+import {
+  DEFAULT_PAGE_LIMIT,
+  DEFAULT_PAGE_START,
+} from '../constants/pagiantion';
 import { UpdateUser, User } from '../interfaces/user';
 import { camelToSnake } from '../utils/common';
 
@@ -62,6 +66,30 @@ class UserModel {
   }
 
   /**
+   * Finds the user by given token
+   *
+   */
+  static async findUserByToken(token: string) {
+    const query = `
+      SELECT id, first_name, last_name, email, role, token_expiry
+      FROM "user"
+      WHERE token = $1;
+    `;
+
+    try {
+      const result = await pool.query(query, [token]);
+
+      if (result.rows.length > 0) {
+        return result.rows[0];
+      }
+    } catch (error) {
+      console.error('Error finding user by token:', error);
+
+      throw new Error('User retrieval failed');
+    }
+  }
+
+  /**
    * Find the given user by ID
    *
    */
@@ -76,7 +104,18 @@ class UserModel {
       const result = await pool.query(query, [userId]);
 
       if (result.rows.length > 0) {
-        return result.rows[0];
+        const user = result.rows[0];
+
+        return {
+          ...user,
+          dob: user.dob ? new Date(user.dob).toLocaleDateString() : null,
+          created_at: user.created_at
+            ? new Date(user.created_at).toLocaleDateString()
+            : null,
+          updated_at: user.updated_at
+            ? new Date(user.updated_at).toLocaleDateString()
+            : null,
+        };
       }
     } catch (error) {
       console.error('Error finding user by ID:', error);
@@ -89,7 +128,10 @@ class UserModel {
    * Get all users
    *
    */
-  static async getAllUsers(page: number = 1, limit: number = 10) {
+  static async getAllUsers(
+    page = DEFAULT_PAGE_START,
+    limit = DEFAULT_PAGE_LIMIT,
+  ) {
     const offset = (page - 1) * limit;
 
     const query = `
@@ -107,8 +149,19 @@ class UserModel {
         pool.query(countQuery),
       ]);
 
+      const formattedResult = result.rows.map((row) => ({
+        ...row,
+        dob: row.dob ? new Date(row.dob).toLocaleDateString() : null,
+        created_at: row.created_at
+          ? new Date(row.created_at).toLocaleDateString()
+          : null,
+        updated_at: row.updated_at
+          ? new Date(row.updated_at).toLocaleDateString()
+          : null,
+      }));
+
       return {
-        data: result.rows,
+        data: formattedResult,
         totalRecords: parseInt(countResult.rows[0].count, 10),
       };
     } catch (error) {
@@ -145,7 +198,7 @@ class UserModel {
       UPDATE "user"
       SET ${setClause}
       WHERE id = $${values.length}
-      RETURNING id;
+      RETURNING id, token, email, first_name, last_name, role, token_expiry;
     `;
 
     try {

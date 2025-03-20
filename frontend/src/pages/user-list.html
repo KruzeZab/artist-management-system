@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <link rel="stylesheet" href="src/css/pages/user-list.css" />
+    <link rel="stylesheet" href="/src/css/pages/user-list.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>User List | Artist Management System</title>
   </head>
@@ -12,11 +12,16 @@
       <header></header>
       <div class="container">
         <!-- Users Table -->
+        <div class="user-list-header">
+          <div class="page-header">
+            <h2 class="page-title page-header__title">Users</h2>
 
-        <div class="page-header">
-          <h2 class="page-title page-header__title">Users</h2>
-
-          <a href="#" class="btn btn-primary page-header__cta">Add User</a>
+            <a
+              href="/src/pages/register.html"
+              class="btn btn-primary page-header__cta"
+              >Add User</a
+            >
+          </div>
         </div>
         <!-- Table -->
         <table class="table">
@@ -33,79 +38,17 @@
             </tr>
           </thead>
 
-          <tbody>
-            <tr>
-              <td>1</td>
-              <td>Max Well</td>
-              <td>max@gmail.com</td>
-              <td>981245678</td>
-              <td>March 2, 2002</td>
-              <td>Male</td>
-              <td>Kathmandu</td>
-              <td>Artist</td>
-            </tr>
-
-            <tr>
-              <td>1</td>
-              <td>Max Well</td>
-              <td>max@gmail.com</td>
-              <td>981245678</td>
-              <td>March 2, 2002</td>
-              <td>Male</td>
-              <td>Kathmandu</td>
-              <td>Artist</td>
-            </tr>
-
-            <tr>
-              <td>1</td>
-              <td>Max Well</td>
-              <td>max@gmail.com</td>
-              <td>981245678</td>
-              <td>March 2, 2002</td>
-              <td>Male</td>
-              <td>Kathmandu</td>
-              <td>Artist</td>
-            </tr>
-
-            <tr>
-              <td>1</td>
-              <td>Max Well</td>
-              <td>max@gmail.com</td>
-              <td>981245678</td>
-              <td>March 2, 2002</td>
-              <td>Male</td>
-              <td>Kathmandu</td>
-              <td>Artist</td>
-            </tr>
-
-            <tr>
-              <td>1</td>
-              <td>Max Well</td>
-              <td>max@gmail.com</td>
-              <td>981245678</td>
-              <td>March 2, 2002</td>
-              <td>Male</td>
-              <td>Kathmandu</td>
-              <td>Artist</td>
-            </tr>
-
-            <tr>
-              <td>1</td>
-              <td>Max Well</td>
-              <td>max@gmail.com</td>
-              <td>981245678</td>
-              <td>March 2, 2002</td>
-              <td>Male</td>
-              <td>Kathmandu</td>
-              <td>Artist</td>
-            </tr>
-          </tbody>
+          <tbody class="user-list"></tbody>
         </table>
 
         <!-- Pagiation -->
         <div class="pagination">
-          <button type="button" class="btn pagination__item">Prev</button>
-          <button type="button" class="btn pagination__item">Next</button>
+          <button type="button" class="btn btn-primary pagination__item">
+            Prev
+          </button>
+          <button type="button" class="btn btn-primary pagination__item">
+            Next
+          </button>
         </div>
       </div>
 

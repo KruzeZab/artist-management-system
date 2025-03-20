@@ -1,15 +1,3 @@
-.pagination {
+.user-list-header {
   padding: 0 1rem;
-  margin: 1rem 0;
-  display: flex;
-  gap: 0.5rem;
-  padding-bottom: 1rem;
-  justify-content: flex-end;
-}
-
-.pagination__item {
-  padding: 1rem;
-  background-color: var(--brand-secondary);
-  font-size: 1.4rem;
-  color: var(--white);
 }

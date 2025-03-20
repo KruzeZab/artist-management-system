@@ -55,14 +55,14 @@ class UserService {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
           success: false,
-          response: { message: 'User not found' },
+          response: { success: false, message: 'User not found' },
         });
       }
 
       return sendApiResponse({
         status: HttpStatus.OK,
         success: true,
-        response: { data },
+        response: { success: true, data },
       });
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -70,7 +70,7 @@ class UserService {
       return sendApiResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         success: false,
-        response: { message: 'Unable to update user' },
+        response: { success: false, message: 'Unable to update user' },
       });
     }
   }
@@ -129,7 +129,11 @@ class UserService {
     return user;
   }
 
-  static async updateUser(userId: number, user: UpdateUser) {
+  static async updateUser(
+    userId: number,
+    user: UpdateUser,
+    currentUserEmail: string = '',
+  ) {
     try {
       const validationResult = validateUserUpdate(user);
 
@@ -137,7 +141,7 @@ class UserService {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
           success: false,
-          response: { error: validationResult.errors },
+          response: { success: false, message: validationResult.errors },
         });
       }
 
@@ -148,7 +152,7 @@ class UserService {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
           success: false,
-          response: { message: 'User not found' },
+          response: { success: false, message: 'User not found' },
         });
       }
 
@@ -156,11 +160,14 @@ class UserService {
       if (user.email) {
         const emailExists = await this.findUserByEmail(user.email);
 
-        if (emailExists) {
+        if (emailExists && currentUserEmail !== user.email) {
           return sendApiResponse({
             status: HttpStatus.BAD_REQUEST,
             success: false,
-            response: { message: 'User with this email already exists.' },
+            response: {
+              success: false,
+              message: 'User with this email already exists.',
+            },
           });
         }
       }
@@ -170,7 +177,7 @@ class UserService {
       return sendApiResponse({
         status: HttpStatus.CREATED,
         success: true,
-        response: { data },
+        response: { success: true, data },
       });
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -178,9 +185,19 @@ class UserService {
       return sendApiResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         success: false,
-        response: { message: 'Unable to update user' },
+        response: { success: false, message: 'Unable to update user' },
       });
     }
+  }
+
+  /**
+   * Finds the user by given token
+   *
+   */
+  static async findUserByToken(token: string) {
+    const user = await UserModel.findUserByToken(token);
+
+    return user;
   }
 }
 

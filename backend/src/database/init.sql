@@ -20,6 +20,8 @@ CREATE TABLE IF NOT EXISTS "user" (
     gender VARCHAR(1) CHECK (gender IN ('m', 'f', 'o')),
     address VARCHAR(255),
     role VARCHAR(20) CHECK (role IN ('super_admin', 'artist_manager', 'artist')) NOT NULL,
+    token VARCHAR(500) DEFAULT NULL,
+    token_expiry TIMESTAMP DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

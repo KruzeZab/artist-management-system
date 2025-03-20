@@ -1,33 +1,28 @@
-import jwt, { JwtPayload } from 'jsonwebtoken';
 import { IncomingMessage, ServerResponse } from 'http';
 
 import { sendResponseToClient } from '../utils/server';
 
-import serverConfig from '../config/config';
-
 import { HttpStatus } from '../interfaces/server';
+import UserService from '../services/user.service';
 
 /**
  * Middleware to check for the
  * authentication status of the user
  *
  */
-export function authenticate(
+export async function authenticate(
   req: IncomingMessage,
   res: ServerResponse,
-  next: (_: string | JwtPayload) => void,
+  next: (_: string) => void,
 ) {
   const token = req.headers.authorization?.split(' ')[1] as string;
 
   if (!token) {
-    return sendResponseToClient(res, HttpStatus.UNAUTHORIZED, {
-      success: false,
-      error: 'No access token!',
-    });
+    return null;
   }
 
   try {
-    const user = jwt.verify(token, serverConfig.jwt.accessToken);
+    const user = await UserService.findUserByToken(token);
 
     next(user);
   } catch {

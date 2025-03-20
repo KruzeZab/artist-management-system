@@ -18,18 +18,16 @@ class UserController {
 
       return sendResponseToClient(res, HttpStatus.OK, {
         success: true,
-        response: {
-          message: 'Users fetched!',
-          data: response.data,
-          meta: response.meta,
-        },
+        message: 'Users fetched!',
+        data: response.data,
+        meta: response.meta,
       });
     } catch (error) {
       console.error('Error fetching users:', error);
 
       return sendResponseToClient(res, HttpStatus.INTERNAL_SERVER_ERROR, {
         success: false,
-        response: { message: 'Failed to fetch users' },
+        message: 'Failed to fetch users',
       });
     }
   }
@@ -83,10 +81,15 @@ class UserController {
   static async updateUser(req: RequestData, res: ServerResponse) {
     try {
       const userId = Number(req.routeParams?.id);
+      const currentUserEmail = req.user.email;
 
       const userBody = req.body;
 
-      const data = await UserService.updateUser(userId, userBody);
+      const data = await UserService.updateUser(
+        userId,
+        userBody,
+        currentUserEmail,
+      );
 
       sendResponseToClient(res, data.status, data.response);
     } catch (error) {

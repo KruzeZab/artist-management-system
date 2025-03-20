@@ -1,5 +1,4 @@
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 
 import { User } from '../interfaces/user';
 import { HttpStatus } from '../interfaces/server';
@@ -15,6 +14,7 @@ import {
 
 import config from '../config/config';
 import UserService from './user.service';
+import { calculateTokenExpiry, generateToken } from '../utils/token';
 
 class AuthService {
   /**
@@ -29,7 +29,7 @@ class AuthService {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
           success: false,
-          response: { error: validationResult.errors },
+          response: { success: false, error: validationResult.errors },
         });
       }
 
@@ -39,8 +39,11 @@ class AuthService {
       if (existingUser) {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
-          success: false,
-          response: { message: 'User already exists with this email' },
+          success: true,
+          response: {
+            success: true,
+            message: 'User already exists with this email',
+          },
         });
       }
 
@@ -63,7 +66,11 @@ class AuthService {
       return sendApiResponse({
         status: HttpStatus.CREATED,
         success: true,
-        response: { message: 'User successfully registered', data },
+        response: {
+          success: true,
+          message: 'User successfully registered',
+          data,
+        },
       });
     } catch (error) {
       console.error('Error registering user:', error);
@@ -71,7 +78,7 @@ class AuthService {
       return sendApiResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         success: false,
-        response: { message: 'User registration failed' },
+        response: { success: false, message: 'User registration failed' },
       });
     }
   }
@@ -88,7 +95,7 @@ class AuthService {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
           success: false,
-          response: { error: validationResult.errors },
+          response: { success: false, error: validationResult.errors },
         });
       }
 
@@ -98,7 +105,7 @@ class AuthService {
         return sendApiResponse({
           status: HttpStatus.UNAUTHORIZED,
           success: false,
-          response: { message: 'Invalid email or password' },
+          response: { success: false, message: 'Invalid email or password' },
         });
       }
 
@@ -108,32 +115,29 @@ class AuthService {
         return sendApiResponse({
           status: HttpStatus.UNAUTHORIZED,
           success: false,
-          response: { message: 'Invalid email or password' },
+          response: { success: false, message: 'Invalid email or password' },
         });
       }
 
+      const token = generateToken();
+
+      const tokenExpiry = calculateTokenExpiry(4);
+
       const userPayload = {
-        id: user.id,
-        email: user.email,
-        role: user.role,
+        token,
+        tokenExpiry,
       };
 
-      const accessToken = jwt.sign(userPayload, config.jwt.accessToken, {
-        expiresIn: '2h',
-      });
-
-      const refreshToken = jwt.sign(userPayload, config.jwt.accessToken, {
-        expiresIn: '24h',
-      });
+      const { response } = await UserService.updateUser(user.id, userPayload);
 
       return sendApiResponse({
         status: HttpStatus.OK,
         success: true,
         response: {
+          success: true,
           message: 'Login successful',
           data: {
-            accessToken,
-            refreshToken,
+            user: response.data,
           },
         },
       });
@@ -143,46 +147,7 @@ class AuthService {
       return sendApiResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         success: false,
-        response: { message: 'Login failed' },
-      });
-    }
-  }
-
-  /**
-   * Regenerate JWT Token
-   *
-   */
-  static async regenerateToken(token: string) {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const payload: any = jwt.verify(token, config.jwt.refreshToken);
-
-      delete payload.iat;
-      delete payload.exp;
-
-      const accessToken = jwt.sign(payload, config.jwt.accessToken, {
-        expiresIn: '4h',
-      });
-
-      const refreshToken = jwt.sign(payload, config.jwt.refreshToken, {
-        expiresIn: '24h',
-      });
-
-      return sendApiResponse({
-        status: HttpStatus.OK,
-        success: true,
-        response: {
-          accessToken,
-          refreshToken,
-        },
-      });
-    } catch (error) {
-      console.error('Error generating token:', error);
-
-      return sendApiResponse({
-        status: HttpStatus.INTERNAL_SERVER_ERROR,
-        success: false,
-        response: { message: 'Error generating token!' },
+        response: { message: 'Login failed', success: false },
       });
     }
   }

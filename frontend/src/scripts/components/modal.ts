@@ -1,7 +1,9 @@
 interface ModalOptions {
   id: string;
-  onClose: () => void;
-  content?: string;
+  title: string;
+  content: string;
+  actions: string;
+  onClose?: () => void;
 }
 
 class Modal {
@@ -20,36 +22,59 @@ class Modal {
     this.closeButtonElement = this.modal.querySelector('.modal__close');
 
     this.initializeEventListeners();
+
+    this.setTitle(this.options.title);
+    this.setContent(this.options.content);
+    this.setActions(this.options.actions);
   }
 
-  private initializeEventListeners(): void {
+  private initializeEventListeners() {
     if (this.closeButtonElement) {
       this.closeButtonElement.addEventListener('click', () => {
         this.hide();
-        this.options.onClose();
+
+        if (this.options.onClose) {
+          this.options.onClose();
+        }
       });
     }
 
     window.addEventListener('click', (event) => {
       if (event.target === this.modal) {
         this.hide();
-        this.options.onClose();
+        if (this.options.onClose) {
+          this.options.onClose();
+        }
       }
     });
   }
 
-  public show(): void {
+  public show() {
     this.modal.style.display = 'flex';
   }
 
-  public hide(): void {
+  public hide() {
     this.modal.style.display = 'none';
   }
 
-  public setContent(content: string): void {
+  public setTitle(title: string) {
+    const modalTitle = this.modal.querySelector('.modal__header-title');
+    if (modalTitle) {
+      modalTitle.innerHTML = title;
+    }
+  }
+
+  public setContent(content: string) {
     const modalBody = this.modal.querySelector('.modal__body');
     if (modalBody) {
       modalBody.innerHTML = content;
+    }
+  }
+
+  public setActions(buttons: string) {
+    const modalFooter = this.modal.querySelector('.modal__footer');
+    if (modalFooter) {
+      modalFooter.innerHTML = buttons;
     }
   }
 }
