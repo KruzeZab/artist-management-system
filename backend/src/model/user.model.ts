@@ -71,7 +71,7 @@ class UserModel {
    */
   static async findUserByToken(token: string) {
     const query = `
-      SELECT id, first_name, last_name, email, role, token_expiry
+      SELECT id, first_name, last_name, email, role, token, token_expiry
       FROM "user"
       WHERE token = $1;
     `;
@@ -237,6 +237,35 @@ class UserModel {
     } catch (error) {
       console.error('Error deleting user:', error);
       throw new Error('User deletion failed');
+    }
+  }
+
+  /**
+   * Updates the user token
+   *
+   */
+  static async updateToken(userId: number, token: string, tokenExpiry: Date) {
+    const query = `
+      UPDATE "user"
+      SET token = $1, token_expiry = $2
+      WHERE id = $3
+      RETURNING id, token, email, first_name, last_name, role;
+    `;
+
+    const values = [token, tokenExpiry, userId];
+
+    try {
+      const result = await pool.query(query, values);
+
+      if (result.rows.length === 0) {
+        throw new Error('User not found or token update failed');
+      }
+
+      return result.rows[0];
+    } catch (error) {
+      console.error('Error updating user token:', error);
+
+      throw new Error('User token update failed');
     }
   }
 }

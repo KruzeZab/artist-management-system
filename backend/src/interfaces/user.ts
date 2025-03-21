@@ -16,8 +16,8 @@ export interface User {
   gender: Gender;
   address: string;
   role: Role;
-  token?: string;
-  expiryTime?: string;
+  token?: string | null;
+  tokenExpiry?: Date | null;
   createdAt?: string;
   updatedAt?: string;
 }

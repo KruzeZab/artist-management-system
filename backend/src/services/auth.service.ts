@@ -15,6 +15,7 @@ import {
 import config from '../config/config';
 import UserService from './user.service';
 import { calculateTokenExpiry, generateToken } from '../utils/token';
+import { TOKEN_EXPIRY_HOUR } from '../constants/application';
 
 class AuthService {
   /**
@@ -121,25 +122,14 @@ class AuthService {
 
       const token = generateToken();
 
-      const tokenExpiry = calculateTokenExpiry(4);
+      const tokenExpiry = calculateTokenExpiry(TOKEN_EXPIRY_HOUR);
 
-      const userPayload = {
-        token,
-        tokenExpiry,
-      };
-
-      const { response } = await UserService.updateUser(user.id, userPayload);
+      const data = await UserService.updateToken(user.id, token, tokenExpiry);
 
       return sendApiResponse({
-        status: HttpStatus.OK,
-        success: true,
-        response: {
-          success: true,
-          message: 'Login successful',
-          data: {
-            user: response.data,
-          },
-        },
+        status: data.status,
+        success: data.success,
+        response: data.response,
       });
     } catch (error) {
       console.error('Error logging in user:', error);
@@ -148,6 +138,35 @@ class AuthService {
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         success: false,
         response: { message: 'Login failed', success: false },
+      });
+    }
+  }
+
+  /**
+   * Logout user
+   *
+   */
+  static async logout(userId: number) {
+    try {
+      const logoutPayload = { token: null, tokenExpiry: null };
+
+      await UserModel.updateUser(userId, logoutPayload);
+
+      return sendApiResponse({
+        status: HttpStatus.OK,
+        success: true,
+        response: {
+          success: true,
+          message: 'Logout successful',
+        },
+      });
+    } catch (error) {
+      console.error('Error logging in user:', error);
+
+      return sendApiResponse({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        success: false,
+        response: { success: false, message: 'Logout failed' },
       });
     }
   }

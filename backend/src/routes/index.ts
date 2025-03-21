@@ -27,6 +27,11 @@ const routes: Record<string, RouteHandler> = {
       );
     }
   },
+  'users/logout': (req, res) => {
+    if (req.method === POST) {
+      AuthController.logoutUser(req, res);
+    }
+  },
   'users/:id': (req, res) => {
     if (req.method === GET) {
       checkUserPermission(res, req.user.role, [Role.SUPER_ADMIN], () =>

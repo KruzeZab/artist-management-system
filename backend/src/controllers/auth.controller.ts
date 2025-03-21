@@ -49,6 +49,27 @@ class AuthController {
       });
     }
   }
+
+  /**
+   * Logout a user
+   *
+   */
+  static async logoutUser(req: RequestData, res: ServerResponse) {
+    try {
+      const userId = req.user.id;
+
+      const data = await AuthService.logout(userId);
+
+      return sendResponseToClient(res, data.status, data.response);
+    } catch (error) {
+      console.error('Error handling logout request:', error);
+
+      return sendResponseToClient(res, HttpStatus.INTERNAL_SERVER_ERROR, {
+        success: false,
+        error: 'Internal server error',
+      });
+    }
+  }
 }
 
 export default AuthController;

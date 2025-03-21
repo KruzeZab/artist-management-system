@@ -7,6 +7,7 @@ export const protectedRoutes = [
   'artists/:artistId/songs/create',
   'artists/:artistId/songs',
   'artists/:artistId/songs/:songId',
+  'users/logout',
 ];
 
 export const publicRoutes = [

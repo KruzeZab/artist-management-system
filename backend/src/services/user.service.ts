@@ -177,7 +177,7 @@ class UserService {
       return sendApiResponse({
         status: HttpStatus.CREATED,
         success: true,
-        response: { success: true, data },
+        response: { success: true, data, message: 'User updated!' },
       });
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -198,6 +198,44 @@ class UserService {
     const user = await UserModel.findUserByToken(token);
 
     return user;
+  }
+
+  /**
+   * Update the token of user
+   *
+   */
+  static async updateToken(userId: number, token: string, tokenExpiry: Date) {
+    try {
+      const userExists = await this.findUserById(userId);
+
+      if (!userExists) {
+        return sendApiResponse({
+          status: HttpStatus.BAD_REQUEST,
+          success: false,
+          response: { message: 'User not found' },
+        });
+      }
+
+      const data = await UserModel.updateToken(userId, token, tokenExpiry);
+
+      return sendApiResponse({
+        status: HttpStatus.CREATED,
+        success: true,
+        response: {
+          success: true,
+          message: 'Successful!',
+          data,
+        },
+      });
+    } catch (error) {
+      console.error('Error logging user out:', error);
+
+      return sendApiResponse({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        success: false,
+        response: { success: false, message: 'Unable to logout' },
+      });
+    }
   }
 }
 

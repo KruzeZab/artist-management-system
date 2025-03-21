@@ -84,7 +84,7 @@ export function validateUserLogin(user: Pick<User, 'email' | 'password'>) {
 export function validateUserUpdate(user: UpdateUser) {
   const errors: string[] = [];
 
-  if (user.role || user.createdAt || user.updatedAt || user.expiryTime) {
+  if (user.role || user.createdAt || user.updatedAt || user.tokenExpiry) {
     errors.push('Invalid payload');
   }
 
