@@ -54,7 +54,18 @@ class ArtistModel {
       const result = await pool.query(query, [artistId]);
 
       if (result.rows.length > 0) {
-        return result.rows[0];
+        const artist = result.rows[0];
+
+        return {
+          ...artist,
+          dob: artist.dob ? new Date(artist.dob).toLocaleDateString() : null,
+          created_at: artist.created_at
+            ? new Date(artist.created_at).toLocaleDateString()
+            : null,
+          updated_at: artist.updated_at
+            ? new Date(artist.updated_at).toLocaleDateString()
+            : null,
+        };
       }
     } catch (error) {
       console.error('Error finding artist by ID:', error);
@@ -88,8 +99,19 @@ class ArtistModel {
         pool.query(countQuery),
       ]);
 
+      const formattedResult = result.rows.map((row) => ({
+        ...row,
+        dob: row.dob ? new Date(row.dob).toLocaleDateString() : null,
+        created_at: row.created_at
+          ? new Date(row.created_at).toLocaleDateString()
+          : null,
+        updated_at: row.updated_at
+          ? new Date(row.updated_at).toLocaleDateString()
+          : null,
+      }));
+
       return {
-        data: result.rows,
+        data: formattedResult,
         totalRecords: parseInt(countResult.rows[0].count, 10),
       };
     } catch (error) {

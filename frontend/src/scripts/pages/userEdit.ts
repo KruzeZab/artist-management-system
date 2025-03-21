@@ -1,7 +1,7 @@
 import config from '../../config';
 
 import { fetchAPI } from '../utils/fetch';
-import { buildUrl } from '../utils/url';
+import { buildUrl, interpolate } from '../utils/url';
 
 import { Gender, UpdateUser } from '../../interface/user';
 
@@ -17,7 +17,13 @@ import { formatDateForInput } from '../utils/user';
 document.addEventListener('DOMContentLoaded', async () => {
   const container = document.querySelector('.container')!;
   const editForm = document.querySelector('.edit-form') as HTMLFormElement;
-  const userDetailTitle = document.getElementById('user-edit-title')!;
+  const userDetailTitle = document.getElementById(
+    'user-edit-title',
+  )! as HTMLHeadingElement;
+
+  const mainFormError = document.getElementById(
+    'main-form-error',
+  )! as HTMLParagraphElement;
 
   // Get user ID from URL
   const urlParams = new URLSearchParams(window.location.search);
@@ -128,8 +134,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       try {
         const updateUrl = buildUrl(
           config.serverUrl,
-          config.endpoints.users,
-          userId.toString(),
+          interpolate(config.endpoints.userDetail, { id: userId.toString() }),
         );
         const response = await fetchAPI<SingleUserResponse>(
           updateUrl,
@@ -141,7 +146,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (response.success) {
           window.location.href = `/src/pages/user-detail.html?id=${userId}`;
         } else {
-          console.error('Failed to update user');
+          mainFormError.style.display = 'block';
+          mainFormError.textContent = response.message;
         }
       } catch (error) {
         console.error('Error updating user:', error);

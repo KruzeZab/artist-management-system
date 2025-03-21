@@ -27,7 +27,7 @@ export function validateArtistRegister(artist: Artist) {
     errors.push('Albums release cannot be negative.');
   }
 
-  if (!artist.firstReleaseYear || !artist.firstReleaseYear.trim()) {
+  if (!artist.firstReleaseYear) {
     errors.push('First release year is required.');
   }
 

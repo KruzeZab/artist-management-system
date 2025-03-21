@@ -35,3 +35,11 @@ export function validateAddress(address: string) {
 export function validateRole(role: string) {
   return role.trim().length;
 }
+
+export function validateFirstReleaseYear(year: number) {
+  return year;
+}
+
+export function validateAlbumsReleased(albums: number) {
+  return albums;
+}

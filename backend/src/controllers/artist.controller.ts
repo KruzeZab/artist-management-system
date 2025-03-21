@@ -40,11 +40,9 @@ class ArtistController {
 
       return sendResponseToClient(res, HttpStatus.OK, {
         success: true,
-        response: {
-          message: 'Artists fetched!',
-          data: response.data,
-          meta: response.meta,
-        },
+        message: 'Artists Fetched!',
+        data: response.data,
+        meta: response.meta,
       });
     } catch (error) {
       console.error('Error fetching artists:', error);

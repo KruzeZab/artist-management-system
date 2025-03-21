@@ -26,7 +26,7 @@ class ArtistService {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
           success: false,
-          response: { error: validationResult.errors },
+          response: { success: false, error: validationResult.errors },
         });
       }
 
@@ -39,7 +39,11 @@ class ArtistService {
       return sendApiResponse({
         status: HttpStatus.CREATED,
         success: true,
-        response: { message: 'Artist successfully created', data },
+        response: {
+          success: true,
+          message: 'Artist successfully created',
+          data,
+        },
       });
     } catch (error) {
       console.error('Error rcreating artist:', error);
@@ -47,7 +51,7 @@ class ArtistService {
       return sendApiResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         success: false,
-        response: { message: 'Unable to create artist' },
+        response: { success: false, message: 'Unable to create artist' },
       });
     }
   }
@@ -72,6 +76,7 @@ class ArtistService {
         status: HttpStatus.OK,
         success: true,
         response: {
+          success: true,
           message: 'Artists fetched successfully!',
           data,
           meta: buildMeta(page, limit, totalRecords, totalPages),
@@ -83,7 +88,7 @@ class ArtistService {
       return sendApiResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         success: false,
-        response: { message: 'Failed to fetch artists' },
+        response: { success: false, message: 'Failed to fetch artists' },
       });
     }
   }
@@ -100,14 +105,14 @@ class ArtistService {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
           success: false,
-          response: { message: 'Artist not found' },
+          response: { success: false, message: 'Artist not found' },
         });
       }
 
       return sendApiResponse({
         status: HttpStatus.OK,
         success: true,
-        response: { data },
+        response: { success: true, data },
       });
     } catch (error) {
       console.error('Error fetching artists:', error);
@@ -115,7 +120,7 @@ class ArtistService {
       return sendApiResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         success: false,
-        response: { message: 'Unable to update artist' },
+        response: { success: false, message: 'Unable to update artist' },
       });
     }
   }
@@ -132,7 +137,7 @@ class ArtistService {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
           success: false,
-          response: { message: 'Artist not found' },
+          response: { success: false, message: 'Artist not found' },
         });
       }
 
@@ -141,7 +146,7 @@ class ArtistService {
       return sendApiResponse({
         status: HttpStatus.OK,
         success: true,
-        response: { data },
+        response: { success: true, data },
       });
     } catch (error) {
       console.error('Error deleting artist:', error);
@@ -149,7 +154,7 @@ class ArtistService {
       return sendApiResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         success: false,
-        response: { message: 'Unable to delete artist' },
+        response: { success: false, message: 'Unable to delete artist' },
       });
     }
   }
@@ -172,7 +177,7 @@ class ArtistService {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
           success: false,
-          response: { error: validationResult.errors },
+          response: { success: false, error: validationResult.errors },
         });
       }
 
@@ -183,7 +188,7 @@ class ArtistService {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
           success: false,
-          response: { message: 'Artist not found' },
+          response: { success: false, message: 'Artist not found' },
         });
       }
 
@@ -192,7 +197,7 @@ class ArtistService {
       return sendApiResponse({
         status: HttpStatus.CREATED,
         success: true,
-        response: { data },
+        response: { success: true, data },
       });
     } catch (error) {
       console.error('Error fetching artist:', error);
@@ -200,7 +205,7 @@ class ArtistService {
       return sendApiResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         success: false,
-        response: { message: 'Unable to update artist' },
+        response: { success: false, message: 'Unable to update artist' },
       });
     }
   }

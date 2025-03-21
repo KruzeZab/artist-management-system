@@ -1,5 +1,5 @@
 import { updatePageUrl } from '../utils/pagination';
-import { getUsers, updateUserTable } from '../utils/userList';
+import { getArtists, updateArtistTable } from '../utils/artistList';
 
 import {
   DEFAULT_PAGE_LIMIT,
@@ -7,7 +7,7 @@ import {
 } from '../../constants/application';
 
 document.addEventListener('DOMContentLoaded', async () => {
-  const userTable = document.querySelector('.user-list')! as HTMLElement;
+  const artistTable = document.querySelector('.user-list')! as HTMLElement;
 
   const prevButton = document.querySelector(
     '.pagination__item:nth-child(1)',
@@ -24,26 +24,28 @@ document.addEventListener('DOMContentLoaded', async () => {
     totalRecords = newTotalRecords;
   };
 
-  async function displayUsers() {
-    const result = await getUsers(currentPage, limit);
+  async function displayArtists() {
+    const result = await getArtists(currentPage, limit);
 
     if (result) {
-      const { users, totalRecords: records } = result;
+      const { artists, totalRecords: records } = result;
+
       setTotalRecords(records);
-      updateUserTable(
+
+      updateArtistTable(
         currentPage,
         limit,
-        users,
+        artists,
         totalRecords,
-        userTable,
+        artistTable,
         prevButton,
         nextButton,
       );
 
       updatePageUrl(currentPage, limit);
     } else {
-      userTable.innerHTML =
-        '<td colspan="8" class="table-error">Failed to load users.</td>';
+      artistTable.innerHTML =
+        '<td colspan="8" class="table-error">Failed to load artists.</td>';
       prevButton.disabled = true;
       nextButton.disabled = true;
     }
@@ -52,14 +54,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   prevButton.addEventListener('click', async () => {
     if (currentPage > 1) {
       currentPage--;
-      await displayUsers();
+      await displayArtists();
     }
   });
 
   nextButton.addEventListener('click', async () => {
     if (currentPage * limit < totalRecords) {
       currentPage++;
-      await displayUsers();
+      await displayArtists();
     }
   });
 
@@ -71,5 +73,5 @@ document.addEventListener('DOMContentLoaded', async () => {
   );
   limit = parseInt(urlParams.get('limit') || DEFAULT_PAGE_LIMIT.toString(), 10);
 
-  await displayUsers();
+  await displayArtists();
 });

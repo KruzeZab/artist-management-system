@@ -4,14 +4,14 @@ import Modal from '../components/modal';
 
 import { GET, DELETE } from '../../constants/methods';
 
-import {
-  DeleteUserResponse,
-  SingleUserResponse,
-} from '../../interface/response';
-
 import { buildUrl, interpolate } from '../utils/url';
 import { fetchAPI } from '../utils/fetch';
-import { mapGender, mapRole } from '../utils/user';
+import { mapGender } from '../utils/user';
+
+import {
+  DeleteArtistResponse,
+  SingleArtistResponse,
+} from '../../interface/response';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const container = document.querySelector('.container')!;
@@ -21,53 +21,53 @@ document.addEventListener('DOMContentLoaded', async () => {
   const deleteBtn = document.getElementById('user-delete')!;
 
   const urlParams = new URLSearchParams(window.location.search);
-  const userId = parseInt(urlParams.get('id') || '', 10);
 
-  editBtn.setAttribute('href', `/src/pages/user-edit.html?id=${userId}`);
+  const artistId = parseInt(urlParams.get('id') || '', 10);
 
-  if (!userId) {
+  editBtn.setAttribute('href', `/src/pages/artist-edit.html?id=${artistId}`);
+
+  if (!artistId) {
     console.error('User ID is missing or invalid');
-    container.innerHTML = '<p class="error-message">User not Found!s</p>';
+    container.innerHTML = '<p class="error-message">Artist not Found!s</p>';
     return;
   }
 
   try {
-    const userUrl = buildUrl(
+    const artistUrl = buildUrl(
       config.serverUrl,
-      interpolate(config.endpoints.userDetail, { id: userId.toString() }),
+      interpolate(config.endpoints.artistDetail, { id: artistId.toString() }),
     );
 
-    const { data: userDetails } = await fetchAPI<SingleUserResponse>(
-      userUrl,
+    const { data: artistDetails } = await fetchAPI<SingleArtistResponse>(
+      artistUrl,
       GET,
       null,
       true,
     );
 
-    if (!userDetails) {
-      console.error('Failed to fetch user details');
+    if (!artistDetails) {
+      console.error('Failed to fetch artist details');
       container.innerHTML =
-        '<p class="table-error">Failed to fetch user details.</p>';
+        '<p class="table-error">Failed to fetch artist details.</p>';
       return;
     }
 
-    userDetailTitle.textContent = `${userDetails.firstName} ${userDetails.lastName}'s Detail`;
+    userDetailTitle.textContent = `${artistDetails.name}'s Detail`;
 
     userDetailInfo.innerHTML = `
-          <p>Full Name: <strong>${userDetails.firstName} ${userDetails.lastName}</strong></p>
-          <p>Gender: <strong>${mapGender(userDetails.gender)}</strong></p>
-          <p>Role: <strong>${mapRole(userDetails.role)}</strong></p>
-          <p>Email: <strong>${userDetails.email}</strong></p>
-          <p>Phone: <strong>${userDetails.phone}</strong></p>
-          <p>Date of Birth: <strong>${userDetails.dob}</strong></p>
-          <p>Address: <strong>${userDetails.address}</strong></p>
+          <p>Full Name: <strong>${artistDetails.name}</strong></p>
+          <p>Gender: <strong>${mapGender(artistDetails.gender)}</strong></p>
+          <p>Date of Birth: <strong>${artistDetails.dob}</strong></p>
+          <p>Address: <strong>${artistDetails.address}</strong></p>
+          <p>First Release Year: <strong>${artistDetails.firstReleaseYear}</strong></p>
+          <p>No of Albums Released: <strong>${artistDetails.noOfAlbumsReleased}</strong></p>
         
     `;
 
     const deleteModal = new Modal({
       id: 'modal',
-      title: 'Delete User',
-      content: 'Are you sure you want to delete this user?',
+      title: 'Delete Artist',
+      content: 'Are you sure you want to delete this artist?',
       actions: ` <button class="btn btn-danger" type="button" id="modal-delete">Delete</button>
             <button class="btn btn-muted" type="button">Cancel</button>`,
     });
@@ -80,11 +80,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       modalDelete.addEventListener('click', async () => {
         const deleteUrl = buildUrl(
           config.serverUrl,
-          interpolate(config.endpoints.userDetail, { id: userId.toString() }),
+          interpolate(config.endpoints.artistDetail, {
+            id: artistId.toString(),
+          }),
         );
 
         try {
-          const response = await fetchAPI<DeleteUserResponse>(
+          const response = await fetchAPI<DeleteArtistResponse>(
             deleteUrl,
             DELETE,
             null,
@@ -92,9 +94,9 @@ document.addEventListener('DOMContentLoaded', async () => {
           );
 
           if (response.success) {
-            window.location.href = '/src/pages/user-list.html';
+            window.location.href = '/src/pages/artist-list.html';
           } else {
-            console.error('Failed to delete user');
+            console.error('Failed to delete artist');
           }
         } catch (error) {
           console.error('Error deleting user:', error);
@@ -102,7 +104,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
     });
   } catch (error) {
-    console.error('Error fetching user details:', error);
+    console.error('Error fetching artist details:', error);
     container.innerHTML = `<p class="error-message">Error: ${
       error instanceof Error ? error.message : 'An unexpected error occurred.'
     }</p>`;

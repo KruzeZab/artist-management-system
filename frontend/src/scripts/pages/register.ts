@@ -1,7 +1,10 @@
-import { fetchAPI } from '../utils/fetch';
-import { POST } from '../../constants/methods';
 import { buildUrl } from '../utils/url';
+import { fetchAPI } from '../utils/fetch';
+
 import config from '../../config';
+
+import { POST } from '../../constants/methods';
+
 import {
   validateAddress,
   validateDob,
@@ -11,10 +14,18 @@ import {
   validatePassword,
   validatePhone,
   validateRole,
-} from '../components/formValidator.js';
-import { ServerResponse } from '../../interface/response.js';
+} from '../components/formValidator';
+
+import { Role } from '../../interface/user';
+import { ServerResponse } from '../../interface/response';
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Assign default role
+  const urlParams = new URLSearchParams(window.location.search);
+  const defaultRole = urlParams.get('role') || Role.SUPER_ADMIN;
+
+  (document.getElementById('role') as HTMLInputElement).value = defaultRole;
+
   const signupForm = document.querySelector(
     '#register-form',
   ) as HTMLFormElement;

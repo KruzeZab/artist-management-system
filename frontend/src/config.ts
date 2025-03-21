@@ -13,7 +13,10 @@ const config = {
     registerUser: '/users/register',
     users: '/users',
     loginUser: '/users/login',
-    refreshToken: 'users/refreshToken',
+    artists: '/artists',
+    userDetail: '/users/:id',
+    artistDetail: '/artists/:id',
+    createArtist: '/artists/create',
   },
 };
 
