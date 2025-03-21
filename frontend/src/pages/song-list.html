@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <link rel="stylesheet" href="src/css/pages/user-list.css" />
+    <link rel="stylesheet" href="/src/css/pages/table-list.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Song List | Artist Management System</title>
   </head>
@@ -12,106 +12,44 @@
       <header></header>
       <div class="container">
         <!-- Users Table -->
-
-        <div class="page-header">
-          <h2 class="page-title page-header__title">Songs</h2>
-
-          <a href="#" class="btn btn-primary page-header__cta">Add Song</a>
+        <div class="user-list-header">
+          <div class="page-header">
+            <h2 class="page-title page-header__title">Kaushal's Songs</h2>
+            <a
+              href="/src/pages/add-song.html?artistId=1"
+              class="btn btn-primary page-header__cta"
+              >Add Song</a
+            >
+          </div>
         </div>
         <!-- Table -->
         <table class="table">
           <thead>
             <tr>
               <th>S.N.</th>
-              <th>Full Name</th>
-              <th>Email</th>
-              <th>Phone Number</th>
-              <th>Date of Birth</th>
-              <th>Gender</th>
-              <th>Address</th>
-              <th>Role</th>
+              <th>Title</th>
+              <th>Album Name</th>
+              <th>Genre</th>
             </tr>
           </thead>
 
-          <tbody>
-            <tr>
-              <td>1</td>
-              <td>Max Well</td>
-              <td>max@gmail.com</td>
-              <td>981245678</td>
-              <td>March 2, 2002</td>
-              <td>Male</td>
-              <td>Kathmandu</td>
-              <td>Artist</td>
-            </tr>
-
-            <tr>
-              <td>1</td>
-              <td>Max Well</td>
-              <td>max@gmail.com</td>
-              <td>981245678</td>
-              <td>March 2, 2002</td>
-              <td>Male</td>
-              <td>Kathmandu</td>
-              <td>Artist</td>
-            </tr>
-
-            <tr>
-              <td>1</td>
-              <td>Max Well</td>
-              <td>max@gmail.com</td>
-              <td>981245678</td>
-              <td>March 2, 2002</td>
-              <td>Male</td>
-              <td>Kathmandu</td>
-              <td>Artist</td>
-            </tr>
-
-            <tr>
-              <td>1</td>
-              <td>Max Well</td>
-              <td>max@gmail.com</td>
-              <td>981245678</td>
-              <td>March 2, 2002</td>
-              <td>Male</td>
-              <td>Kathmandu</td>
-              <td>Artist</td>
-            </tr>
-
-            <tr>
-              <td>1</td>
-              <td>Max Well</td>
-              <td>max@gmail.com</td>
-              <td>981245678</td>
-              <td>March 2, 2002</td>
-              <td>Male</td>
-              <td>Kathmandu</td>
-              <td>Artist</td>
-            </tr>
-
-            <tr>
-              <td>1</td>
-              <td>Max Well</td>
-              <td>max@gmail.com</td>
-              <td>981245678</td>
-              <td>March 2, 2002</td>
-              <td>Male</td>
-              <td>Kathmandu</td>
-              <td>Artist</td>
-            </tr>
-          </tbody>
+          <tbody class="user-list"></tbody>
         </table>
 
         <!-- Pagiation -->
         <div class="pagination">
-          <button type="button" class="btn pagination__item">Prev</button>
-          <button type="button" class="btn pagination__item">Next</button>
+          <button type="button" class="btn btn-primary pagination__item">
+            Prev
+          </button>
+          <button type="button" class="btn btn-primary pagination__item">
+            Next
+          </button>
         </div>
       </div>
 
       <footer></footer>
     </div>
     <script type="module" src="/src/scripts/main.ts"></script>
-    <script type="module" src="/src/scripts/pages/userList.ts"></script>
+    <script type="module" src="/src/scripts/pages/songList.ts"></script>
   </body>
 </html>

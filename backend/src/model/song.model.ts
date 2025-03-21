@@ -38,9 +38,16 @@ class SongModel {
    */
   static async findSongById(songId: number) {
     const query = `
-      SELECT id, artist_id, title, album_name, genre
-      FROM "music"
-      WHERE id = $1;
+      SELECT 
+        m.id, 
+        m.artist_id, 
+        a.name AS artist_name, 
+        m.title, 
+        m.album_name, 
+        m.genre
+      FROM "music" m
+      JOIN "artist" a ON m.artist_id = a.id
+      WHERE m.id = $1;
     `;
 
     try {
@@ -51,7 +58,6 @@ class SongModel {
       }
     } catch (error) {
       console.error('Error finding song by ID:', error);
-
       throw new Error('Song retrieval failed');
     }
   }
@@ -63,22 +69,34 @@ class SongModel {
   static async getAllSongs(
     page = DEFAULT_PAGE_START,
     limit = DEFAULT_PAGE_LIMIT,
+    artistId?: number,
   ) {
     const offset = (page - 1) * limit;
 
-    const query = `
+    let query = `
       SELECT id, artist_id, title, album_name, genre
       FROM "music"
-      ORDER BY created_at DESC
-      LIMIT $1 OFFSET $2;
     `;
+    let countQuery = `SELECT COUNT(*) FROM "music"`;
 
-    const countQuery = `SELECT COUNT(*) FROM "music";`;
+    const queryParams = [];
+    const countQueryParams = [];
+
+    if (artistId) {
+      query += ` WHERE artist_id = $1`;
+      countQuery += ` WHERE artist_id = $1`;
+
+      queryParams.push(artistId);
+      countQueryParams.push(artistId);
+    }
+
+    query += ` ORDER BY created_at DESC LIMIT $${queryParams.length + 1} OFFSET $${queryParams.length + 2};`;
+    queryParams.push(limit, offset);
 
     try {
       const [result, countResult] = await Promise.all([
-        pool.query(query, [limit, offset]),
-        pool.query(countQuery),
+        pool.query(query, queryParams),
+        pool.query(countQuery, countQueryParams),
       ]);
 
       return {
@@ -87,7 +105,6 @@ class SongModel {
       };
     } catch (error) {
       console.error('Error retrieving songs:', error);
-
       throw new Error('Failed to fetch songs');
     }
   }

@@ -1,5 +1,6 @@
 import { User } from './user';
 import { Artist } from './artist';
+import { Song } from './song';
 
 export interface ServerResponse {
   success: boolean;
@@ -36,6 +37,7 @@ export interface DeleteUserResponse {
 
 export interface ArtistListResponse {
   success: boolean;
+  message: string;
   data: Artist[];
   meta: Meta;
 }
@@ -47,6 +49,26 @@ export interface SingleArtistResponse {
 }
 
 export interface DeleteArtistResponse {
+  success: boolean;
+  message: string;
+  data: number;
+}
+
+export interface SongListResponse {
+  success: boolean;
+  message: string;
+  data: Song[];
+  meta: Meta;
+}
+
+export interface SingleSongResponse {
+  success: boolean;
+  message: string;
+  artistName: string;
+  data: Song;
+}
+
+export interface DeleteSongResponse {
   success: boolean;
   message: string;
   data: number;

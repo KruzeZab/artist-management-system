@@ -19,7 +19,7 @@ export function validateArtistRegister(artist: Artist) {
     errors.push('Date of birth is required.');
   }
 
-  if (!artist.noOfAlbumsReleased) {
+  if (artist.noOfAlbumsReleased === undefined) {
     errors.push('No of albums released is required.');
   }
 

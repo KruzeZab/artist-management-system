@@ -42,16 +42,11 @@ class SongController {
       const limit =
         parseInt(req.queryString.limit as string, 10) || DEFAULT_PAGE_LIMIT;
 
-      const { response } = await SongService.getAllSongs(page, limit);
+      const artistId = parseInt(req.queryString.artistId as string, 10);
 
-      return sendResponseToClient(res, HttpStatus.OK, {
-        success: true,
-        response: {
-          message: 'Songs fetched!',
-          data: response.data,
-          meta: response.meta,
-        },
-      });
+      const { response } = await SongService.getAllSongs(page, limit, artistId);
+
+      return sendResponseToClient(res, HttpStatus.OK, response);
     } catch (error) {
       console.error('Error fetching songs:', error);
 

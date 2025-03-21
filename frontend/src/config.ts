@@ -17,6 +17,9 @@ const config = {
     userDetail: '/users/:id',
     artistDetail: '/artists/:id',
     createArtist: '/artists/create',
+    createSong: '/artists/:artistId/songs/create',
+    songs: '/artists/:artistId/songs',
+    songDetail: '/artists/:artistId/songs/:songId',
   },
 };
 

@@ -40,7 +40,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         nextButton,
       );
 
-      updatePageUrl(currentPage, limit);
+      updatePageUrl({
+        page: currentPage.toString(),
+        limit: limit.toString(),
+      });
     } else {
       userTable.innerHTML =
         '<td colspan="8" class="table-error">Failed to load users.</td>';

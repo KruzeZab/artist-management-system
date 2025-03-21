@@ -42,7 +42,7 @@ class SongService {
       return sendApiResponse({
         status: HttpStatus.CREATED,
         success: true,
-        response: { message: 'Song successfully created', data },
+        response: { success: true, message: 'Song successfully created', data },
       });
     } catch (error) {
       console.error('Error rcreating song:', error);
@@ -63,15 +63,21 @@ class SongService {
   static async getAllSongs(
     page = DEFAULT_PAGE_START,
     limit = DEFAULT_PAGE_LIMIT,
+    artistId?: number,
   ) {
     try {
-      const { data, totalRecords } = await SongModel.getAllSongs(page, limit);
+      const { data, totalRecords } = await SongModel.getAllSongs(
+        page,
+        limit,
+        artistId,
+      );
       const totalPages = Math.ceil(totalRecords / limit);
 
       return sendApiResponse({
         status: HttpStatus.OK,
         success: true,
         response: {
+          success: true,
           message: 'Songs fetched successfully!',
           data,
           meta: buildMeta(page, limit, totalRecords, totalPages),
