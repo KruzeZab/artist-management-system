@@ -68,6 +68,7 @@ export function updateArtistTable(
       <td>${artist.address}</td>
       <td>${artist.firstReleaseYear}</td>
       <td>${artist.noOfAlbumsReleased}</td>
+      <td><a href="/src/pages/song-list.html?artistId=${artist.id}" class="view-btn">View Songs</a></td>
     `;
     artistTable.appendChild(row);
   });

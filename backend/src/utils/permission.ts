@@ -15,13 +15,12 @@ export const checkUserPermission = (
   requiredRoles: Role[],
   next: () => void,
 ) => {
-  const hasPermission = requiredRoles.includes(role);
-
-  if (!hasPermission) {
-    return sendResponseToClient(res, HttpStatus.UNAUTHORIZED, {
-      success: false,
-      message: 'You are not authorized',
-    });
+  if (role === Role.SUPER_ADMIN || requiredRoles.includes(role)) {
+    return next();
   }
-  next();
+
+  return sendResponseToClient(res, HttpStatus.UNAUTHORIZED, {
+    success: false,
+    message: 'You are not authorized',
+  });
 };

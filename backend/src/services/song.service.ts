@@ -113,7 +113,7 @@ class SongService {
       return sendApiResponse({
         status: HttpStatus.OK,
         success: true,
-        response: { data },
+        response: { success: true, data, message: 'Song fetched!' },
       });
     } catch (error) {
       console.error('Error fetching songs:', error);
@@ -189,7 +189,7 @@ class SongService {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
           success: false,
-          response: { message: 'Song not found' },
+          response: { success: false, message: 'Song not found' },
         });
       }
 
@@ -198,7 +198,7 @@ class SongService {
       return sendApiResponse({
         status: HttpStatus.CREATED,
         success: true,
-        response: { data },
+        response: { success: true, data },
       });
     } catch (error) {
       console.error('Error fetching song:', error);

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="stylesheet" href="/src/css/pages/user-edit.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Artist Management System</title>
+  </head>
+  <body>
+    <div id="app">
+      <header></header>
+      <div>
+        <!-- Edit Form here -->
+        <div class="edit-form-wrapper">
+          <form action="#" class="edit-form" method="post">
+            <div class="page-header user-edit-header">
+              <h2
+                class="page-title page-header__title"
+                id="user-edit-title"
+              ></h2>
+            </div>
+            <p id="main-form-error"></p>
+
+            <!-- Title -->
+            <div class="edit-form__group">
+              <label class="edit-form__group-label" for="name">Title</label>
+              <input
+                type="text"
+                name="title"
+                autofocus
+                id="title"
+                class="form-control"
+              />
+              <div id="title-error" class="form-error"></div>
+            </div>
+
+            <!-- Album Name -->
+            <div class="edit-form__group">
+              <label class="edit-form__group-label" for="album-name"
+                >Album Name</label
+              >
+              <input
+                type="text"
+                name="album-name"
+                id="album-name"
+                class="form-control"
+              />
+              <div id="album-name-error" class="form-error"></div>
+            </div>
+
+            <div class="edit-form__group">
+              <label class="edit-form__group-label" for="genre">Genre</label>
+              <select name="genre" id="genre" class="form-control">
+                <option value="rnb">RNB</option>
+                <option value="country">Country</option>
+                <option value="classic">Classic</option>
+                <option value="rock">Rock</option>
+                <option value="jazz">Jazz</option>
+              </select>
+              <div id="genre-error" class="form-error"></div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary edit-form__cta">
+              Edit
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <footer></footer>
+    </div>
+    <script type="module" src="/src/scripts/main.ts"></script>
+    <script type="module" src="/src/scripts/pages/songEdit.ts"></script>
+  </body>
+</html>

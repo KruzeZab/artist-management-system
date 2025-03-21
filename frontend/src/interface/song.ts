@@ -16,3 +16,9 @@ export interface Song {
   createdAt?: string;
   updatedAt?: string;
 }
+
+export interface UpdateSong {
+  title: string;
+  albumName: string;
+  genre: Genre;
+}

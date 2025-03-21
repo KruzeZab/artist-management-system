@@ -17,6 +17,6 @@ export interface UpdateArtist {
   dob: string;
   gender: Gender;
   address: string;
-  firstReleaseYear: string;
+  firstReleaseYear: number;
   noOfAlbumsReleased: number;
 }

@@ -92,9 +92,11 @@ document.addEventListener('DOMContentLoaded', async () => {
           document.getElementById('address') as HTMLInputElement
         ).value.trim(),
 
-        firstReleaseYear: (
-          document.getElementById('first-release-year') as HTMLInputElement
-        ).value.trim(),
+        firstReleaseYear: Number(
+          (
+            document.getElementById('first-release-year') as HTMLInputElement
+          ).value.trim(),
+        ),
 
         noOfAlbumsReleased: Number(
           (
