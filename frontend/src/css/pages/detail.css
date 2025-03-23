@@ -1,6 +1,6 @@
 .user-detail-header {
   border-bottom: 1px solid var(--bg-grey);
-  padding-left: 1rem;
+  padding: 0 1rem;
 }
 
 .user-detail {
@@ -13,7 +13,6 @@
   flex-direction: column;
   gap: 4px;
   padding-bottom: 1rem;
-  border-bottom: 1px solid var(--bg-grey);
 }
 
 .user-detail__info p {
@@ -30,6 +29,7 @@
 }
 
 .user-detail__cta {
+  border-top: 1px solid var(--bg-grey);
   padding-top: 1rem;
   display: flex;
   justify-content: flex-end;

@@ -4,11 +4,12 @@ import { GET } from '../../constants/methods';
 
 import { ArtistListResponse } from '../../interface/response';
 
-import { mapGender } from './user';
+import { getFullName, mapGender } from './user';
 
 import { buildUrl } from '../utils/url';
 import { fetchAPI } from '../utils/fetch';
 import { Artist } from '../../interface/artist';
+import { AuthUser, Role } from '../../interface/user';
 
 /**
  * Fetches artists from the server based on the provided page and limit.
@@ -46,14 +47,15 @@ export function updateArtistTable(
   artistTable: HTMLElement,
   prevButton: HTMLButtonElement,
   nextButton: HTMLButtonElement,
+  currentUser: AuthUser | null,
 ) {
   artistTable.innerHTML = '';
 
   if (!artists || !artists.length) {
     artistTable.innerHTML =
       '<td colspan="8" class="table-empty">No artists found.</td>';
-    prevButton.disabled = true;
-    nextButton.disabled = true;
+    prevButton.classList.add('d-none');
+    nextButton.classList.add('d-none');
     return;
   }
 
@@ -61,18 +63,27 @@ export function updateArtistTable(
     const row = document.createElement('tr');
     const artistDetailLink = `/src/pages/artist-detail.html?id=${artist.id}`;
     row.innerHTML = `
-      <td>${(page - 1) * limit + index + 1}</td>
-      <td><a href="${artistDetailLink}">${artist.name}</a></td>
-      <td>${mapGender(artist.gender)}</td>
-      <td>${artist.dob}</td>
-      <td>${artist.address}</td>
-      <td>${artist.firstReleaseYear}</td>
-      <td>${artist.noOfAlbumsReleased}</td>
-      <td><a href="/src/pages/song-list.html?artistId=${artist.id}" class="view-btn">View Songs</a></td>
-    `;
+    <td>${(page - 1) * limit + index + 1}</td>
+    <td><a href="${artistDetailLink}">${getFullName(artist.firstName, artist.lastName)}</a></td>
+    <td>${mapGender(artist.gender)}</td>
+    <td>${artist.dob}</td>
+    <td>${artist.address}</td>
+    <td>${artist.firstReleaseYear}</td>
+    <td>${artist.noOfAlbumsReleased}</td>
+    ${currentUser?.role === Role.SUPER_ADMIN ? `<td><a href="/src/pages/song-list.html?artistId=${artist.id}" class="view-btn">View Songs</a></td>` : ''}
+    <td><a href="/src/pages/artist-detail.html?id=${artist.id}" class="view-btn">View Detail</a></td>
+  `;
     artistTable.appendChild(row);
   });
 
-  prevButton.disabled = page <= 1;
-  nextButton.disabled = page * limit >= totalRecords;
+  const isPrevBtnDisabled = page <= 1;
+  const isNextBtnDisabled = page * limit >= totalRecords;
+
+  if (isNextBtnDisabled) {
+    nextButton.classList.add('d-none');
+  }
+
+  if (isPrevBtnDisabled) {
+    prevButton.classList.add('d-none');
+  }
 }

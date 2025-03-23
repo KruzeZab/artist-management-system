@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const artistId = parseInt(urlParams.get('artistId') || '', 10);
   const songId = parseInt(urlParams.get('songId') || '', 10);
 
-  if (!artistId || !songId) {
+  if (!songId) {
     console.error('ID is missing or invalid');
     container.innerHTML =
       '<p class="error-message">ID is missing or invalid.</p>';
@@ -48,8 +48,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       null,
       true,
     );
-
-    console.log(songDetails, 'song detail');
 
     if (!songDetails) {
       console.error('Failed to fetch song details');
@@ -133,13 +131,12 @@ document.addEventListener('DOMContentLoaded', async () => {
           mainFormError.style.display = 'block';
           mainFormError.textContent = response.message;
         }
-        console.error('Failed to update song');
-      } catch (error) {
-        console.error('Error updating song:', error);
+      } catch {
+        mainFormError.style.display = 'block';
+        mainFormError.textContent = 'Something went wrong!';
       }
     });
   } catch (error) {
-    console.error('Error fetching song details:', error);
     container.innerHTML = `<p class="error-message">Error: ${error instanceof Error ? error.message : 'An unexpected error occurred.'}</p>`;
   }
 });

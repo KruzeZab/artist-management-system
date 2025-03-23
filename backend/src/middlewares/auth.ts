@@ -20,7 +20,7 @@ export async function authenticate(
   const token = req.headers.authorization?.split(' ')[1] as string;
 
   if (!token) {
-    return next(null);
+    return null;
   }
 
   try {
@@ -30,7 +30,7 @@ export async function authenticate(
       user.token_expiry && new Date(user.token_expiry) < new Date();
 
     if (isTokenExpired) {
-      next(null);
+      return null;
     }
 
     next(user);

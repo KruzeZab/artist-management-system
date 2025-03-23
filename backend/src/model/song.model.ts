@@ -41,12 +41,14 @@ class SongModel {
       SELECT 
         m.id, 
         m.artist_id, 
-        a.name AS artist_name, 
+        u.first_name AS artist_first_name, 
+        u.last_name AS artist_last_name, 
         m.title, 
         m.album_name, 
         m.genre
       FROM "music" m
       JOIN "artist" a ON m.artist_id = a.id
+      JOIN "user" u ON a.user_id = u.id
       WHERE m.id = $1;
     `;
 
@@ -74,23 +76,37 @@ class SongModel {
     const offset = (page - 1) * limit;
 
     let query = `
-      SELECT id, artist_id, title, album_name, genre
-      FROM "music"
+      SELECT
+        m.id,
+        m.artist_id,
+        u.first_name AS artist_first_name, 
+        u.last_name AS artist_last_name,
+        m.title,
+        m.album_name,
+        m.genre
+      FROM music m
+      JOIN artist a ON m.artist_id = a.id
+      JOIN "user" u ON a.user_id = u.id
     `;
-    let countQuery = `SELECT COUNT(*) FROM "music"`;
+
+    let countQuery = `
+     SELECT COUNT(*)
+      FROM "music" m
+      JOIN "artist" a ON m.artist_id = a.id
+      JOIN "user" u ON a.user_id = u.id
+    `;
 
     const queryParams = [];
     const countQueryParams = [];
 
     if (artistId) {
-      query += ` WHERE artist_id = $1`;
-      countQuery += ` WHERE artist_id = $1`;
-
+      query += ` WHERE m.artist_id = $1`;
+      countQuery += ` WHERE m.artist_id = $1`;
       queryParams.push(artistId);
       countQueryParams.push(artistId);
     }
 
-    query += ` ORDER BY created_at DESC LIMIT $${queryParams.length + 1} OFFSET $${queryParams.length + 2};`;
+    query += ` ORDER BY m.created_at DESC LIMIT $${queryParams.length + 1} OFFSET $${queryParams.length + 2};`;
     queryParams.push(limit, offset);
 
     try {

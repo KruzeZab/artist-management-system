@@ -29,14 +29,12 @@ CREATE TABLE IF NOT EXISTS "user" (
 -- Create 'artist' table
 CREATE TABLE IF NOT EXISTS artist (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    dob TIMESTAMP,
-    gender VARCHAR(1) CHECK (gender IN ('m', 'f', 'o')),
-    address VARCHAR(255),
-    first_release_year INT CHECK (first_release_year > 1900),
+    user_id INT UNIQUE NOT NULL,
+    first_release_year INT,
     no_of_albums_released INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES "user"(id) ON DELETE CASCADE
 );
 
 -- Create 'music' table

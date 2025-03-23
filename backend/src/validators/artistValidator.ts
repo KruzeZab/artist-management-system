@@ -11,14 +11,6 @@ import { Artist } from '../interfaces/artist';
 export function validateArtistRegister(artist: Artist) {
   const errors: string[] = [];
 
-  if (!artist.name || !artist.name.trim()) {
-    errors.push('Name must be at least 2 characters long.');
-  }
-
-  if (!artist.dob) {
-    errors.push('Date of birth is required.');
-  }
-
   if (artist.noOfAlbumsReleased === undefined) {
     errors.push('No of albums released is required.');
   }
@@ -29,14 +21,6 @@ export function validateArtistRegister(artist: Artist) {
 
   if (!artist.firstReleaseYear) {
     errors.push('First release year is required.');
-  }
-
-  if (!artist.address || !artist.address.trim()) {
-    errors.push('Address is required.');
-  }
-
-  if (!artist.gender || !Object.values(Gender).includes(artist.gender)) {
-    errors.push("Gender must be 'm', 'f', or 'o'.");
   }
 
   return errors.length > 0 ? { success: false, errors } : { success: true };

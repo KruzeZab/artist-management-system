@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const mainFormError = document.getElementById(
       'main-form-error',
-    ) as HTMLDivElement;
+    ) as HTMLParagraphElement;
     const fnameError = document.getElementById('fname-error') as HTMLDivElement;
     const lnameError = document.getElementById('lname-error') as HTMLDivElement;
     const emailError = document.getElementById('email-error') as HTMLDivElement;
@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
       isValid = false;
     }
     if (!validateAddress(address)) {
-      addressError.textContent = 'Please enter a valid DOB.';
+      addressError.textContent = 'Please enter a valid address.';
       isValid = false;
     }
 
@@ -165,6 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
           mainFormError.textContent = response.message;
         }
       } catch {
+        mainFormError.style.display = 'block';
         mainFormError.textContent = 'Something went wrong!';
       } finally {
         registerButton.disabled = false;

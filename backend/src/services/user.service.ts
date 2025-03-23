@@ -87,7 +87,7 @@ class UserService {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
           success: false,
-          response: { message: 'User not found' },
+          response: { success: false, message: 'User not found' },
         });
       }
 
@@ -96,7 +96,7 @@ class UserService {
       return sendApiResponse({
         status: HttpStatus.OK,
         success: true,
-        response: { data },
+        response: { success: true, data },
       });
     } catch (error) {
       console.error('Error deleting user:', error);
@@ -129,11 +129,7 @@ class UserService {
     return user;
   }
 
-  static async updateUser(
-    userId: number,
-    user: UpdateUser,
-    currentUserEmail: string = '',
-  ) {
+  static async updateUser(userId: number, user: UpdateUser) {
     try {
       const validationResult = validateUserUpdate(user);
 
@@ -154,22 +150,6 @@ class UserService {
           success: false,
           response: { success: false, message: 'User not found' },
         });
-      }
-
-      // Check if email already exists
-      if (user.email) {
-        const emailExists = await this.findUserByEmail(user.email);
-
-        if (emailExists && currentUserEmail !== user.email) {
-          return sendApiResponse({
-            status: HttpStatus.BAD_REQUEST,
-            success: false,
-            response: {
-              success: false,
-              message: 'User with this email already exists.',
-            },
-          });
-        }
       }
 
       const data = await UserModel.updateUser(userId, user);
@@ -224,7 +204,7 @@ class UserService {
         response: {
           success: true,
           message: 'Successful!',
-          data,
+          ...data,
         },
       });
     } catch (error) {

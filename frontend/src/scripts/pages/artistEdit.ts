@@ -180,8 +180,9 @@ document.addEventListener('DOMContentLoaded', async () => {
           mainFormError.textContent = response.message;
         }
         console.error('Failed to update artist');
-      } catch (error) {
-        console.error('Error updating artist:', error);
+      } catch {
+        mainFormError.style.display = 'block';
+        mainFormError.textContent = 'Something went wrong!';
       }
     });
   } catch (error) {

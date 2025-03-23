@@ -11,11 +11,17 @@ import {
   DeleteArtistResponse,
   SingleSongResponse,
 } from '../../interface/response';
+import { hideForRoles } from '../utils/authorization';
+import { Role } from '../../interface/user';
+import { getFullName } from '../utils/user';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const container = document.querySelector('.container')!;
   const userDetailTitle = document.getElementById('user-detail-title')!;
   const userDetailInfo = document.querySelector('.user-detail__info')!;
+  const userDetailCta = document.querySelector(
+    '.user-detail__cta',
+  )! as HTMLElement;
   const editBtn = document.getElementById('user-edit')!;
   const deleteBtn = document.getElementById('user-delete')!;
 
@@ -24,18 +30,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   const artistId = parseInt(urlParams.get('artistId') || '', 10);
   const songId = parseInt(urlParams.get('songId') || '', 10);
 
-  editBtn.setAttribute(
-    'href',
-    `/src/pages/song-edit.html?artistId=${artistId}&songId=${songId}`,
-  );
-
-  if (!artistId || !songId) {
+  if (!songId) {
     console.error('ID is missing or invalid');
     container.innerHTML = '<p class="error-message">Song not Found!s</p>';
     return;
   }
 
   try {
+    hideForRoles(userDetailCta, [Role.ARTIST_MANAGER]);
+
     const artistUrl = buildUrl(
       config.serverUrl,
       interpolate(config.endpoints.songDetail, {
@@ -62,7 +65,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     userDetailInfo.innerHTML = `
         <p>Title: <strong>${songDetails.title}</strong></p>
-        <p>Artist: <strong>${songDetails.artistName}</strong></p>
+        <p>Artist: <strong>${getFullName(songDetails.artistFirstName, songDetails.artistLastName)}</strong></p>
         <p>Album: <strong>${songDetails.albumName}</strong></p>
         <p>Genre: <strong>${songDetails.genre}</strong></p>
     `;
@@ -107,6 +110,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
       });
     });
+
+    editBtn.setAttribute(
+      'href',
+      `/src/pages/song-edit.html?artistId=${songDetails.artistId}&songId=${songId}`,
+    );
   } catch (error) {
     console.error('Error fetching song details:', error);
     container.innerHTML = `<p class="error-message">Error: ${

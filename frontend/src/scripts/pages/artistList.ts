@@ -5,6 +5,7 @@ import {
   DEFAULT_PAGE_LIMIT,
   DEFAULT_PAGE_START,
 } from '../../constants/application';
+import { getCurrentUser } from '../utils/user';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const artistTable = document.querySelector('.user-list')! as HTMLElement;
@@ -40,6 +41,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         artistTable,
         prevButton,
         nextButton,
+        getCurrentUser(),
       );
 
       updatePageUrl({
@@ -49,8 +51,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     } else {
       artistTable.innerHTML =
         '<td colspan="8" class="table-error">Failed to load artists.</td>';
-      prevButton.disabled = true;
-      nextButton.disabled = true;
+
+      prevButton.classList.add('d-none');
+      nextButton.classList.add('d-none');
     }
   }
 

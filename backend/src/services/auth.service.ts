@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 
-import { User } from '../interfaces/user';
+import { Role, User } from '../interfaces/user';
 import { HttpStatus } from '../interfaces/server';
 
 import UserModel from '../model/user.model';
@@ -16,13 +16,15 @@ import config from '../config/config';
 import UserService from './user.service';
 import { calculateTokenExpiry, generateToken } from '../utils/token';
 import { TOKEN_EXPIRY_HOUR } from '../constants/application';
+import { PoolClient } from 'pg';
+import ArtistService from './artist.service';
 
 class AuthService {
   /**
    * Register a new user
    *
    */
-  static async register(user: User) {
+  static async register(user: User, client?: PoolClient) {
     try {
       const validationResult = validateUserRegister(user);
 
@@ -40,9 +42,9 @@ class AuthService {
       if (existingUser) {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
-          success: true,
+          success: false,
           response: {
-            success: true,
+            success: false,
             message: 'User already exists with this email',
           },
         });
@@ -55,14 +57,13 @@ class AuthService {
       );
 
       // Create user with hashed password
-      const result = await UserModel.createUser({
-        ...user,
-        password: hashedPassword,
-      });
-
-      const data = {
-        userId: result.id,
-      };
+      const result = await UserModel.createUser(
+        {
+          ...user,
+          password: hashedPassword,
+        },
+        client,
+      );
 
       return sendApiResponse({
         status: HttpStatus.CREATED,
@@ -70,7 +71,7 @@ class AuthService {
         response: {
           success: true,
           message: 'User successfully registered',
-          data,
+          data: result.id,
         },
       });
     } catch (error) {
@@ -126,10 +127,25 @@ class AuthService {
 
       const data = await UserService.updateToken(user.id, token, tokenExpiry);
 
+      let apiResponse = {
+        role: data.response.role,
+        firstName: data.response.firstName,
+        lastName: data.response.lastName,
+        id: data.response.id,
+        token: data.response.token,
+        tokeExpiry: data.response.tokenExpiry,
+      };
+
+      if (data.response.role === Role.ARTIST) {
+        const artist = await ArtistService.findArtistByUserId(user.id);
+
+        apiResponse = { ...apiResponse, ...artist };
+      }
+
       return sendApiResponse({
         status: data.status,
         success: data.success,
-        response: data.response,
+        response: { success: true, data: apiResponse, message: 'Logged in!' },
       });
     } catch (error) {
       console.error('Error logging in user:', error);

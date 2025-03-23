@@ -12,8 +12,14 @@
   --brand-secondary: #0eb1d2;
   --brand-tertiary: #34e4ea;
   --secondary-hover: #0b9cb9;
+  --text-secondary: rgb(0 0 0 / 80%);
   --disabled: #c3c3c3;
   --transit: all 0.2s linear;
+  --breakpoint-sm: 60rem;
+  --breakpoint-md: 76.8rem;
+  --breakpoint-lg: 99.2rem;
+  --breakpoint-xl: 120rem;
+  --box-shadow: 1px 1px 1px 0.5px rgb(0 0 0 / 10%);
 }
 
 *,
@@ -59,6 +65,7 @@ img {
 
 .btn-primary:hover {
   background-color: var(--secondary-hover);
+  color: var(--white);
 }
 
 .btn-primary:disabled {
@@ -97,6 +104,7 @@ img {
   width: 90%;
   background-color: var(--white);
   margin: 0 auto;
+  margin-bottom: 8rem;
 }
 
 .page-title {

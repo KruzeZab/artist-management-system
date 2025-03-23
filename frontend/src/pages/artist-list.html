@@ -9,36 +9,39 @@
   </head>
   <body>
     <div id="app">
-      <header></header>
+      <header class="header"></header>
       <div class="container">
         <!-- Users Table -->
         <div class="user-list-header">
           <div class="page-header">
             <h2 class="page-title page-header__title">Artists</h2>
             <a
-              href="/src/pages/register.html?role=artist"
+              href="/src/pages/artist-create.html"
               class="btn btn-primary page-header__cta"
               >Add Artist</a
             >
           </div>
         </div>
-        <!-- Table -->
-        <table class="table">
-          <thead>
-            <tr>
-              <th>S.N.</th>
-              <th>Full Name</th>
-              <th>Gender</th>
-              <th>Date of Birth</th>
-              <th>Address</th>
-              <th>First Release Year</th>
-              <th>No of albums released</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
+        <div class="table-wrapper">
+          <!-- Table -->
+          <table class="table">
+            <thead>
+              <tr>
+                <th>S.N.</th>
+                <th>Full Name</th>
+                <th>Gender</th>
+                <th>Date of Birth</th>
+                <th>Address</th>
+                <th>First Release Year</th>
+                <th>No of albums released</th>
+                <th class="hide-am">Songs</th>
+                <th>Detail</th>
+              </tr>
+            </thead>
 
-          <tbody class="user-list"></tbody>
-        </table>
+            <tbody class="user-list"></tbody>
+          </table>
+        </div>
 
         <!-- Pagiation -->
         <div class="pagination">
@@ -51,7 +54,9 @@
         </div>
       </div>
 
-      <footer></footer>
+      <footer class="footer">
+        <p class="footer__text">&copy; Copyright 2025. All rights reserved.</p>
+      </footer>
     </div>
     <script type="module" src="/src/scripts/main.ts"></script>
     <script type="module" src="/src/scripts/pages/artistList.ts"></script>

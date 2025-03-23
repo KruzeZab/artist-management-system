@@ -1,14 +1,9 @@
-import { Gender } from './common';
+import { User } from './user';
 
-export interface Artist {
-  name: string;
-  dob: string;
-  gender: Gender;
-  address: string;
+export interface Artist extends User {
+  userId: number;
   firstReleaseYear: string;
   noOfAlbumsReleased: number;
-  createdAt?: string;
-  updatedAt?: string;
 }
 
 export type UpdateArtist = Omit<Artist, 'createdAt' | 'updatedAt'>;

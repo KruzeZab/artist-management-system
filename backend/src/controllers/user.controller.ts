@@ -81,15 +81,10 @@ class UserController {
   static async updateUser(req: RequestData, res: ServerResponse) {
     try {
       const userId = Number(req.routeParams?.id);
-      const currentUserEmail = req.user.email;
 
       const userBody = req.body;
 
-      const data = await UserService.updateUser(
-        userId,
-        userBody,
-        currentUserEmail,
-      );
+      const data = await UserService.updateUser(userId, userBody);
 
       sendResponseToClient(res, data.status, data.response);
     } catch (error) {

@@ -2,12 +2,19 @@ import {
   DEFAULT_PAGE_LIMIT,
   DEFAULT_PAGE_START,
 } from '../../constants/application';
+import { Role } from '../../interface/user';
+import { hideForRoles } from '../utils/authorization';
 
 import { updatePageUrl } from '../utils/pagination';
 import { getSongs, updateSongsTable } from '../utils/songList';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const userTable = document.querySelector('.user-list')! as HTMLElement;
+
+  const songListCta = document.getElementById('song-list-cta')! as HTMLElement;
+  const addSongLink = document.querySelector(
+    '.page-header__cta',
+  )! as HTMLAnchorElement;
 
   const prevButton = document.querySelector(
     '.pagination__item:nth-child(1)',
@@ -16,13 +23,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     '.pagination__item:nth-child(2)',
   ) as HTMLButtonElement;
 
+  hideForRoles(songListCta, [Role.ARTIST_MANAGER]);
+
   let currentPage = DEFAULT_PAGE_START;
   let limit = DEFAULT_PAGE_LIMIT;
   let totalRecords = 0;
 
   const urlParams = new URLSearchParams(window.location.search);
-
-  const artistId = parseInt(urlParams.get('artistId') || '', 10);
 
   currentPage = parseInt(
     urlParams.get('page') || DEFAULT_PAGE_START.toString(),
@@ -34,7 +41,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     totalRecords = newTotalRecords;
   };
 
+  const artistId = parseInt(urlParams.get('artistId') || '', 10);
+
   async function displaySongs() {
+    if (!artistId) {
+      userTable.innerHTML =
+        '<td colspan="8" class="table-error">Unable to load songs.</td>';
+    }
+
     const result = await getSongs(currentPage, limit, artistId);
 
     if (result) {
@@ -51,16 +65,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         nextButton,
       );
 
-      updatePageUrl({
+      const params: Record<string, string> = {
         page: currentPage.toString(),
         limit: limit.toString(),
-        artistId: artistId.toString(),
-      });
+      };
+
+      if (artistId) {
+        params.artistId = artistId.toString();
+      }
+
+      updatePageUrl(params);
     } else {
       userTable.innerHTML =
         '<td colspan="8" class="table-error">Failed to load songs.</td>';
-      prevButton.disabled = true;
-      nextButton.disabled = true;
+
+      prevButton.classList.add('d-none');
+      nextButton.classList.add('d-none');
     }
   }
 
@@ -79,4 +99,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   await displaySongs();
+
+  if (!artistId) {
+    userTable.innerHTML =
+      '<td colspan="8" class="table-error">Unable to load songs.</td>';
+    songListCta.classList.add('d-none');
+  }
+
+  addSongLink.setAttribute(
+    'href',
+    `/src/pages/song-create.html?artistId=${artistId}`,
+  );
 });

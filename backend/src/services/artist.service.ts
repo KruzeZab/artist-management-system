@@ -6,12 +6,18 @@ import {
 import { HttpStatus } from '../interfaces/server';
 import { Artist, UpdateArtist } from '../interfaces/artist';
 
+import UserModel from '../model/user.model';
 import ArtistModel from '../model/artist.model';
 
 import { buildMeta } from '../utils/pagination';
 import { sendApiResponse } from '../utils/server';
+import { withTransaction } from '../utils/model';
 
+import { Role } from '../interfaces/user';
+
+import { validateUserRegister } from '../validators/userValidator';
 import { validateArtistRegister } from '../validators/artistValidator';
+import AuthService from './auth.service';
 
 class ArtistService {
   /**
@@ -20,33 +26,74 @@ class ArtistService {
    */
   static async createArtist(artist: Artist) {
     try {
-      const validationResult = validateArtistRegister(artist);
+      const userValidation = validateUserRegister(artist);
 
-      if (!validationResult.success) {
+      const artistValidation = validateArtistRegister(artist);
+
+      if (!artistValidation.success || !userValidation.success) {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
           success: false,
-          response: { success: false, error: validationResult.errors },
+          response: {
+            success: false,
+            error: artistValidation.errors || userValidation.errors,
+          },
         });
       }
 
-      const result = await ArtistModel.createArtist(artist);
+      const result = await withTransaction(async (client) => {
+        const artistPayload = {
+          ...artist,
+          role: Role.ARTIST,
+        };
 
-      const data = {
-        artistId: result.id,
-      };
+        const response = await AuthService.register(artistPayload, client);
+
+        if (!response.success) {
+          return sendApiResponse({
+            status: response.status,
+            success: response.success,
+            response: {
+              success: response.response.success,
+              message: response.response.message,
+            },
+          });
+        }
+
+        const artistDetails = {
+          ...artist,
+          userId: response.response.data as number,
+        };
+
+        const createdArtist = await ArtistModel.createArtist(
+          artistDetails,
+          client,
+        );
+
+        if (createdArtist) {
+          return sendApiResponse({
+            status: HttpStatus.CREATED,
+            success: true,
+            response: {
+              success: true,
+              message: 'Artist successfully created',
+              data: {
+                artistId: createdArtist.id,
+              },
+            },
+          });
+        }
+
+        throw new Error('Something went wrong');
+      });
 
       return sendApiResponse({
-        status: HttpStatus.CREATED,
-        success: true,
-        response: {
-          success: true,
-          message: 'Artist successfully created',
-          data,
-        },
+        status: result.status,
+        success: result.success,
+        response: result.response,
       });
     } catch (error) {
-      console.error('Error rcreating artist:', error);
+      console.error('Error creating artist:', error);
 
       return sendApiResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
@@ -99,6 +146,14 @@ class ArtistService {
    */
   static async getArtist(artistId: number) {
     try {
+      if (!artistId) {
+        return sendApiResponse({
+          status: HttpStatus.BAD_REQUEST,
+          success: false,
+          response: { success: false, message: 'Artis id not present.' },
+        });
+      }
+
       const data = await ArtistModel.findArtistById(artistId);
 
       if (!data) {
@@ -126,40 +181,6 @@ class ArtistService {
   }
 
   /**
-   * Delete an artist
-   *
-   */
-  static async deleteArtist(artistId: number) {
-    try {
-      const artistExists = await ArtistModel.findArtistById(artistId);
-
-      if (!artistExists) {
-        return sendApiResponse({
-          status: HttpStatus.BAD_REQUEST,
-          success: false,
-          response: { success: false, message: 'Artist not found' },
-        });
-      }
-
-      const data = await ArtistModel.deleteArtist(artistId);
-
-      return sendApiResponse({
-        status: HttpStatus.OK,
-        success: true,
-        response: { success: true, data },
-      });
-    } catch (error) {
-      console.error('Error deleting artist:', error);
-
-      return sendApiResponse({
-        status: HttpStatus.INTERNAL_SERVER_ERROR,
-        success: false,
-        response: { success: false, message: 'Unable to delete artist' },
-      });
-    }
-  }
-
-  /**
    * Find the artist given by id
    *
    */
@@ -171,13 +192,17 @@ class ArtistService {
 
   static async updateArtist(artistId: number, artist: UpdateArtist) {
     try {
-      const validationResult = validateArtistRegister(artist);
+      const userValidation = validateUserRegister(artist);
+      const artistValidation = validateArtistRegister(artist);
 
-      if (!validationResult.success) {
+      if (!artistValidation.success || !userValidation.success) {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
           success: false,
-          response: { success: false, error: validationResult.errors },
+          response: {
+            success: false,
+            error: artistValidation.errors || artistValidation,
+          },
         });
       }
 
@@ -192,7 +217,18 @@ class ArtistService {
         });
       }
 
-      const data = await ArtistModel.updateArtist(artistId, artist);
+      const data = await withTransaction(async (client) => {
+        const artistPayload = {
+          firstReleaseYear: artist.firstReleaseYear,
+          noOfAlbumsReleased: artist.noOfAlbumsReleased,
+        };
+
+        await ArtistModel.updateArtist(artistId, artistPayload, client);
+
+        const updatedUser = await UserModel.updateUser(artist.userId, artist);
+
+        return updatedUser;
+      });
 
       return sendApiResponse({
         status: HttpStatus.CREATED,
@@ -208,6 +244,16 @@ class ArtistService {
         response: { success: false, message: 'Unable to update artist' },
       });
     }
+  }
+
+  /**
+   * Find artist by user id
+   *
+   */
+  static async findArtistByUserId(userId: number) {
+    const artist = await ArtistModel.findArtistByUserId(userId);
+
+    return artist;
   }
 }
 

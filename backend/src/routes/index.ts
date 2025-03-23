@@ -76,10 +76,6 @@ const routes: Record<string, RouteHandler> = {
       checkUserPermission(res, req.user.role, [Role.ARTIST_MANAGER], () =>
         ArtistController.updateArtist(req, res),
       );
-    } else if (req.method === DELETE) {
-      checkUserPermission(res, req.user.role, [Role.ARTIST_MANAGER], () =>
-        ArtistController.deleteArtist(req, res),
-      );
     }
   },
 
@@ -87,16 +83,6 @@ const routes: Record<string, RouteHandler> = {
     if (req.method === POST) {
       checkUserPermission(res, req.user.role, [Role.ARTIST], () =>
         SongController.registerSong(req, res),
-      );
-    }
-  },
-  'artists/:artistId/songs': (req, res) => {
-    if (req.method === GET) {
-      checkUserPermission(
-        res,
-        req.user.role,
-        [Role.SUPER_ADMIN, Role.ARTIST_MANAGER, Role.ARTIST],
-        () => SongController.getAllSongs(req, res),
       );
     }
   },
@@ -115,6 +101,17 @@ const routes: Record<string, RouteHandler> = {
     } else if (req.method === DELETE) {
       checkUserPermission(res, req.user.role, [Role.ARTIST], () =>
         SongController.deleteSong(req, res),
+      );
+    }
+  },
+
+  songs: (req, res) => {
+    if (req.method === GET) {
+      checkUserPermission(
+        res,
+        req.user.role,
+        [Role.SUPER_ADMIN, Role.ARTIST_MANAGER, Role.ARTIST],
+        () => SongController.getAllSongs(req, res),
       );
     }
   },

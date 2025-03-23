@@ -51,8 +51,8 @@ export function updateUserTable(
   if (!users || !users.length) {
     userTable.innerHTML =
       '<td colspan="8" class="table-empty">No users found.</td>';
-    prevButton.disabled = true;
-    nextButton.disabled = true;
+    prevButton.classList.add('d-none');
+    nextButton.classList.add('d-none');
     return;
   }
 
@@ -71,10 +71,19 @@ export function updateUserTable(
       <td>${mapGender(user.gender)}</td>
       <td>${user.address}</td>
       <td>${mapRole(user.role)}</td>
+      <td><a href="/src/pages/user-detail.html?id=${user.id}" class="view-btn">View Detail</a></td>
     `;
     userTable.appendChild(row);
   });
 
-  prevButton.disabled = page <= 1;
-  nextButton.disabled = page * limit >= totalRecords;
+  const isPrevBtnDisabled = page <= 1;
+  const isNextBtnDisabled = page * limit >= totalRecords;
+
+  if (isNextBtnDisabled) {
+    nextButton.classList.add('d-none');
+  }
+
+  if (isPrevBtnDisabled) {
+    prevButton.classList.add('d-none');
+  }
 }

@@ -6,7 +6,7 @@ import { GET, DELETE } from '../../constants/methods';
 
 import { buildUrl, interpolate } from '../utils/url';
 import { fetchAPI } from '../utils/fetch';
-import { mapGender } from '../utils/user';
+import { getFullName, mapGender } from '../utils/user';
 
 import {
   DeleteArtistResponse,
@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const container = document.querySelector('.container')!;
   const userDetailTitle = document.getElementById('user-detail-title')!;
   const userDetailInfo = document.querySelector('.user-detail__info')!;
+  const viewSongsBtn = document.querySelector('.page-header__cta')!;
   const editBtn = document.getElementById('user-edit')!;
   const deleteBtn = document.getElementById('user-delete')!;
 
@@ -25,6 +26,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   const artistId = parseInt(urlParams.get('id') || '', 10);
 
   editBtn.setAttribute('href', `/src/pages/artist-edit.html?id=${artistId}`);
+  viewSongsBtn.setAttribute(
+    'href',
+    `/src/pages/song-list.html?artistId=${artistId}`,
+  );
 
   if (!artistId) {
     console.error('User ID is missing or invalid');
@@ -52,10 +57,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
 
-    userDetailTitle.textContent = `${artistDetails.name}'s Detail`;
+    userDetailTitle.textContent = `${getFullName(artistDetails.firstName, artistDetails.lastName)}'s Detail`;
 
     userDetailInfo.innerHTML = `
-          <p>Full Name: <strong>${artistDetails.name}</strong></p>
+          <p>Full Name: <strong>${getFullName(artistDetails.firstName, artistDetails.lastName)}</strong></p>
           <p>Gender: <strong>${mapGender(artistDetails.gender)}</strong></p>
           <p>Date of Birth: <strong>${artistDetails.dob}</strong></p>
           <p>Address: <strong>${artistDetails.address}</strong></p>

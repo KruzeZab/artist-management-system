@@ -1,3 +1,5 @@
+import { PoolClient } from 'pg';
+
 import { pool } from '../config/dbConfig';
 import {
   DEFAULT_PAGE_LIMIT,
@@ -12,24 +14,23 @@ class ArtistModel {
    * Create a new artist
    *
    */
-  static async createArtist(artist: Artist) {
+  static async createArtist(artist: Artist, client?: PoolClient) {
+    const pgClient = client ?? pool;
+
     const query = `
-        INSERT INTO "artist" (name, dob, gender, address, first_release_year, no_of_albums_released)
-        VALUES ($1, $2, $3, $4, $5, $6)
+        INSERT INTO "artist" (first_release_year, no_of_albums_released, user_id)
+        VALUES ($1, $2, $3)
         RETURNING id;
 `;
 
     const values = [
-      artist.name,
-      artist.dob,
-      artist.gender,
-      artist.address,
       artist.firstReleaseYear,
       artist.noOfAlbumsReleased,
+      artist.userId,
     ];
 
     try {
-      const result = await pool.query(query, values);
+      const result = await pgClient.query(query, values);
 
       return result.rows[0];
     } catch (error) {
@@ -45,9 +46,12 @@ class ArtistModel {
    */
   static async findArtistById(artistId: number) {
     const query = `
-      SELECT id, name, dob, gender, address, first_release_year, no_of_albums_released
-      FROM "artist"
-      WHERE id = $1;
+      SELECT
+        a.*,
+        u.*
+      FROM artist a
+      JOIN "user" u ON a.user_id = u.id
+      WHERE a.id = $1;
     `;
 
     try {
@@ -85,13 +89,26 @@ class ArtistModel {
     const offset = (page - 1) * limit;
 
     const query = `
-      SELECT id, name, dob, gender, address, first_release_year, no_of_albums_released
-      FROM "artist"
-      ORDER BY created_at DESC
-      LIMIT $1 OFFSET $2;
-    `;
+    SELECT
+      a.id,
+      a.first_release_year,
+      a.no_of_albums_released,
+      u.first_name,
+      u.last_name,
+      u.dob,
+      u.gender,
+      u.address
+    FROM artist a
+    JOIN "user" u ON a.user_id = u.id
+    ORDER BY a.created_at DESC
+    LIMIT $1 OFFSET $2;
+  `;
 
-    const countQuery = `SELECT COUNT(*) FROM "artist";`;
+    const countQuery = `
+    SELECT COUNT(*)
+    FROM artist a
+    JOIN "user" u ON a.user_id = u.id;
+  `;
 
     try {
       const [result, countResult] = await Promise.all([
@@ -125,7 +142,13 @@ class ArtistModel {
    * Partially update artist's details
    *
    */
-  static async updateArtist(artistId: number, updates: UpdateArtist) {
+  static async updateArtist(
+    artistId: number,
+    updates: Partial<UpdateArtist>,
+    client?: PoolClient,
+  ) {
+    const pgClient = client ?? pool;
+
     let fields = Object.keys(updates);
 
     if (fields.length === 0) {
@@ -152,7 +175,7 @@ class ArtistModel {
     `;
 
     try {
-      const result = await pool.query(query, values);
+      const result = await pgClient.query(query, values);
 
       if (result.rows.length === 0) {
         throw new Error('Artist not found or update failed');
@@ -166,27 +189,27 @@ class ArtistModel {
   }
 
   /**
-   * Delete an artist
+   * Find artist by user id
    *
    */
-  static async deleteArtist(artistID: number) {
+  static async findArtistByUserId(userId: number) {
     const query = `
-      DELETE FROM "artist"
-      WHERE id = $1
-      RETURNING id;
+      SELECT
+      id AS artist_id
+      FROM artist
+      WHERE user_id = $1;
     `;
 
     try {
-      const result = await pool.query(query, [artistID]);
+      const result = await pool.query(query, [userId]);
 
-      if (result.rows.length === 0) {
-        throw new Error('Artist not found or deletion failed');
+      if (result.rows.length > 0) {
+        return result.rows[0];
       }
-
-      return result.rows[0].id;
     } catch (error) {
-      console.error('Error deleting artist:', error);
-      throw new Error('Artist deletion failed');
+      console.error('Error finding artist by ID:', error);
+
+      throw new Error('Artist retrieval failed');
     }
   }
 }

@@ -1,4 +1,6 @@
-import { Gender, Role } from '../../interface/user';
+import { AUTH } from '../../constants/application';
+
+import { AuthUser, Gender, Role } from '../../interface/user';
 
 /**
  * Get full name of the user
@@ -44,4 +46,20 @@ export const formatDateForInput = (dateString: string) => {
   const [month, day, year] = dateString.split('/').map(Number);
 
   return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+};
+
+/**
+ * Get current user information
+ *
+ */
+export const getCurrentUser = () => {
+  const authUser = localStorage.getItem(AUTH);
+
+  let currentUser: AuthUser | null = null;
+
+  if (authUser && authUser !== 'undefined') {
+    currentUser = JSON.parse(authUser);
+  }
+
+  return currentUser;
 };

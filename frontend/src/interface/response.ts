@@ -73,3 +73,8 @@ export interface DeleteSongResponse {
   message: string;
   data: number;
 }
+
+export interface LogoutResponse {
+  success: boolean;
+  message: string;
+}

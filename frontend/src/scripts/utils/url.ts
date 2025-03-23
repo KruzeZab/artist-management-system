@@ -48,6 +48,7 @@ export function interpolate(
     if (key in params) {
       return encodeURIComponent(params[key]);
     }
+
     throw new Error(`Missing parameter: ${key}`);
   });
 }

@@ -1,3 +1,4 @@
+import { PoolClient } from 'pg';
 import { pool } from '../config/dbConfig';
 import {
   DEFAULT_PAGE_LIMIT,
@@ -11,7 +12,9 @@ class UserModel {
    * Create a new user
    *
    */
-  static async createUser(user: User) {
+  static async createUser(user: User, client?: PoolClient) {
+    const pgClient = client ?? pool;
+
     const query = `
         INSERT INTO "user" (first_name, last_name, email, password, phone, dob, gender, address, role)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
@@ -31,7 +34,7 @@ class UserModel {
     ];
 
     try {
-      const result = await pool.query(query, values);
+      const result = await pgClient.query(query, values);
 
       return result.rows[0];
     } catch (error) {
@@ -175,7 +178,13 @@ class UserModel {
    * Partially update user details
    *
    */
-  static async updateUser(userId: number, updates: UpdateUser) {
+  static async updateUser(
+    userId: number,
+    updates: UpdateUser,
+    client?: PoolClient,
+  ) {
+    const pgClient = client ?? pool;
+
     let fields = Object.keys(updates);
 
     if (fields.length === 0) {
@@ -202,7 +211,7 @@ class UserModel {
     `;
 
     try {
-      const result = await pool.query(query, values);
+      const result = await pgClient.query(query, values);
 
       if (result.rows.length === 0) {
         throw new Error('User not found or update failed');

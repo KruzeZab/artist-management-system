@@ -2,7 +2,9 @@ import { ServerResponse } from 'http';
 import { HttpStatus, RequestData } from '../interfaces/server';
 
 import { sendResponseToClient } from '../utils/server';
+
 import ArtistService from '../services/artist.service';
+
 import { Artist } from '../interfaces/artist';
 
 class ArtistController {
@@ -63,27 +65,6 @@ class ArtistController {
       const artistId = Number(req.routeParams?.id);
 
       const data = await ArtistService.getArtist(artistId);
-
-      sendResponseToClient(res, data.status, data.response);
-    } catch (error) {
-      console.error('Error handling request:', error);
-
-      sendResponseToClient(res, HttpStatus.INTERNAL_SERVER_ERROR, {
-        success: false,
-        error: 'Internal Server Error',
-      });
-    }
-  }
-
-  /**
-   * Delete artist
-   *
-   */
-  static async deleteArtist(req: RequestData, res: ServerResponse) {
-    try {
-      const artistId = Number(req.routeParams?.id);
-
-      const data = await ArtistService.deleteArtist(artistId);
 
       sendResponseToClient(res, data.status, data.response);
     } catch (error) {

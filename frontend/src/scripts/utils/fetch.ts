@@ -13,9 +13,13 @@ export async function fetchAPI<T>(
     'Content-Type': 'application/json',
   };
 
+  let authToken;
+
   const localAuth = getItem(AUTH);
 
-  const authToken = localAuth ? JSON.parse(localAuth)?.token : null;
+  if (localAuth) {
+    authToken = localAuth !== 'undefined' ? JSON.parse(localAuth)?.token : null;
+  }
 
   if (authenticate && authToken) {
     headers['Authorization'] = `Bearer ${authToken}`;
@@ -27,18 +31,9 @@ export async function fetchAPI<T>(
     options.body = JSON.stringify(body);
   }
 
-  try {
-    const response = await fetch(url, options);
+  const response = await fetch(url, options);
 
-    const data: T = await response.json();
+  const data: T = await response.json();
 
-    if (!response.ok) {
-      return data;
-    }
-
-    return data;
-  } catch (error) {
-    console.error('Fetch Error:', error);
-    throw error;
-  }
+  return data;
 }

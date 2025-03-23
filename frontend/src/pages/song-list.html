@@ -14,27 +14,32 @@
         <!-- Users Table -->
         <div class="user-list-header">
           <div class="page-header">
-            <h2 class="page-title page-header__title">Kaushal's Songs</h2>
+            <h2 class="page-title page-header__title">Songs</h2>
             <a
-              href="/src/pages/add-song.html?artistId=1"
+              href=""
               class="btn btn-primary page-header__cta"
+              id="song-list-cta"
               >Add Song</a
             >
           </div>
         </div>
-        <!-- Table -->
-        <table class="table">
-          <thead>
-            <tr>
-              <th>S.N.</th>
-              <th>Title</th>
-              <th>Album Name</th>
-              <th>Genre</th>
-            </tr>
-          </thead>
+        <div class="table-wrapper">
+          <!-- Table -->
+          <table class="table">
+            <thead>
+              <tr>
+                <th>S.N.</th>
+                <th>Title</th>
+                <th>Album Name</th>
+                <th>Genre</th>
+                <th>Artist</th>
+                <th>Detail</th>
+              </tr>
+            </thead>
 
-          <tbody class="user-list"></tbody>
-        </table>
+            <tbody class="user-list"></tbody>
+          </table>
+        </div>
 
         <!-- Pagiation -->
         <div class="pagination">

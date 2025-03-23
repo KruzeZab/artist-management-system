@@ -1,18 +1,15 @@
 import config from '../../config';
 
 import { fetchAPI } from '../utils/fetch';
+import { formatDateForInput } from '../utils/user';
 import { buildUrl, interpolate } from '../utils/url';
 
 import { Gender, UpdateUser } from '../../interface/user';
+import { SingleUserResponse } from '../../interface/response';
 
 import { PATCH, GET } from '../../constants/methods';
-import { SingleUserResponse } from '../../interface/response';
-import {
-  validateEmail,
-  validateName,
-  validatePhone,
-} from '../components/formValidator';
-import { formatDateForInput } from '../utils/user';
+
+import { validateName, validatePhone } from '../components/formValidator';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const container = document.querySelector('.container')!;
@@ -62,8 +59,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       userDetails.firstName;
     (document.getElementById('lname') as HTMLInputElement).value =
       userDetails.lastName;
-    (document.getElementById('email') as HTMLInputElement).value =
-      userDetails.email;
     (document.getElementById('phone') as HTMLInputElement).value =
       userDetails.phone;
     (document.getElementById('dob') as HTMLInputElement).value =
@@ -83,9 +78,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         lastName: (
           document.getElementById('lname') as HTMLInputElement
         ).value.trim(),
-        email: (
-          document.getElementById('email') as HTMLInputElement
-        ).value.trim(),
         phone: (
           document.getElementById('phone') as HTMLInputElement
         ).value.trim(),
@@ -101,12 +93,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       const fnameError = document.getElementById('fname-error')!;
       const lnameError = document.getElementById('lname-error')!;
-      const emailError = document.getElementById('email-error')!;
       const phoneError = document.getElementById('phone-error')!;
 
       fnameError.textContent = '';
       lnameError.textContent = '';
-      emailError.textContent = '';
       phoneError.textContent = '';
 
       if (!validateName(updatedUser.firstName)) {
@@ -119,10 +109,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         isValid = false;
       }
 
-      if (!validateEmail(updatedUser.email)) {
-        emailError.textContent = 'Please enter a valid email address';
-        isValid = false;
-      }
       if (!validatePhone(updatedUser.phone)) {
         phoneError.textContent = 'Please enter a valid phone number.';
         isValid = false;
@@ -149,8 +135,9 @@ document.addEventListener('DOMContentLoaded', async () => {
           mainFormError.style.display = 'block';
           mainFormError.textContent = response.message;
         }
-      } catch (error) {
-        console.error('Error updating user:', error);
+      } catch {
+        mainFormError.style.display = 'block';
+        mainFormError.textContent = 'Something went wrong!';
       }
     });
   } catch (error) {

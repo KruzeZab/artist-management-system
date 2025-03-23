@@ -1,15 +1,9 @@
-import { Gender } from './user';
+import { Gender, User } from './user';
 
-export interface Artist {
+export interface Artist extends User {
   id: number;
-  name: string;
-  dob: string;
-  gender: Gender;
-  address: string;
   firstReleaseYear: string;
   noOfAlbumsReleased: number;
-  createdAt?: string;
-  updatedAt?: string;
 }
 
 export interface UpdateArtist {

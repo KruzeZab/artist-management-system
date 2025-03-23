@@ -1,9 +1,12 @@
 import { ServerResponse } from 'http';
+
+import { Song } from '../interfaces/song';
+import { Role } from '../interfaces/user';
 import { HttpStatus, RequestData } from '../interfaces/server';
 
 import { sendResponseToClient } from '../utils/server';
+
 import SongService from '../services/song.service';
-import { Song } from '../interfaces/song';
 import {
   DEFAULT_PAGE_LIMIT,
   DEFAULT_PAGE_START,
@@ -37,14 +40,26 @@ class SongController {
    */
   static async getAllSongs(req: RequestData, res: ServerResponse) {
     try {
+      const role = req.user.role;
+
       const page =
         parseInt(req.queryString.page as string, 10) || DEFAULT_PAGE_START;
       const limit =
         parseInt(req.queryString.limit as string, 10) || DEFAULT_PAGE_LIMIT;
 
-      const artistId = parseInt(req.queryString.artistId as string, 10);
+      let artistId: number | undefined;
 
-      const { response } = await SongService.getAllSongs(page, limit, artistId);
+      if (role !== Role.SUPER_ADMIN) {
+        artistId = req.user.artistId;
+      } else {
+        const artistIdParam = req.queryString.artistId as string;
+        artistId = artistIdParam ? parseInt(artistIdParam, 10) : undefined;
+      }
+
+      const { response } =
+        artistId !== undefined
+          ? await SongService.getAllSongs(page, limit, artistId)
+          : await SongService.getAllSongs(page, limit);
 
       return sendResponseToClient(res, HttpStatus.OK, response);
     } catch (error) {

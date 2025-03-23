@@ -9,7 +9,7 @@
   </head>
   <body>
     <div id="app">
-      <header></header>
+      <header class="header"></header>
       <div class="container">
         <!-- Users Table -->
         <div class="user-list-header">
@@ -24,22 +24,25 @@
           </div>
         </div>
         <!-- Table -->
-        <table class="table">
-          <thead>
-            <tr>
-              <th>S.N.</th>
-              <th>Full Name</th>
-              <th>Email</th>
-              <th>Phone Number</th>
-              <th>Date of Birth</th>
-              <th>Gender</th>
-              <th>Address</th>
-              <th>Role</th>
-            </tr>
-          </thead>
+        <div class="table-wrapper">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>S.N.</th>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Date of Birth</th>
+                <th>Gender</th>
+                <th>Address</th>
+                <th>Role</th>
+                <th>Detail</th>
+              </tr>
+            </thead>
 
-          <tbody class="user-list"></tbody>
-        </table>
+            <tbody class="user-list"></tbody>
+          </table>
+        </div>
 
         <!-- Pagiation -->
         <div class="pagination">

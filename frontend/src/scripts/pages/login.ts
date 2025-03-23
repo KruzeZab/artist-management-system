@@ -67,14 +67,15 @@ document.addEventListener('DOMContentLoaded', () => {
         );
 
         if (response.success) {
-          setItem(AUTH, JSON.stringify(response.data.user));
+          setItem(AUTH, JSON.stringify(response.data));
 
-          window.location.href = '/src/pages/register.html';
+          window.location.href = '/src/pages/users.html';
         } else {
           mainFormError.style.display = 'block';
           mainFormError.textContent = response.message;
         }
       } catch {
+        mainFormError.style.display = 'block';
         mainFormError.textContent = 'Something went wrong!';
       } finally {
         loginButton.disabled = false;

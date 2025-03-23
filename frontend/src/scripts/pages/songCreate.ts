@@ -104,6 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
           mainFormError.textContent = response.message;
         }
       } catch {
+        mainFormError.style.display = 'block';
         mainFormError.textContent = 'Something went wrong!';
       } finally {
         registerButton.disabled = false;

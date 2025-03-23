@@ -30,9 +30,17 @@ export interface User {
 export interface UpdateUser {
   firstName: string;
   lastName: string;
-  email: string;
   phone: string;
   dob: string;
   gender: Gender;
   address: string;
+}
+
+export interface AuthUser {
+  id: number;
+  token: string;
+  email: string;
+  tokenExpiry: string;
+  role: Role;
+  artistId?: number;
 }

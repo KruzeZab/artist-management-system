@@ -55,13 +55,13 @@ const requestHandler = (req: IncomingMessage, res: ServerResponse) => {
 
     if (isProtectedRoute(path)) {
       authenticate(req, res, (user) => {
-        data.user = user;
-
         if (!user) {
           return sendResponseToClient(res, HttpStatus.UNAUTHORIZED, {
             message: 'No Token',
           });
         }
+
+        data.user = user;
 
         route(data, res);
       });
