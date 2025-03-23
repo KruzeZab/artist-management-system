@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <link rel="stylesheet" href="/src/css/pages/user-edit.css" />
+    <link rel="stylesheet" href="/src/css/base.css" />
+    <link rel="stylesheet" href="/src/css/main.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Artist Management System</title>
   </head>
@@ -22,17 +23,34 @@
             </div>
             <p id="main-form-error"></p>
 
-            <!-- Full Name -->
-            <div class="edit-form__group">
-              <label class="edit-form__group-label" for="name">Full Name</label>
-              <input
-                type="text"
-                name="name"
-                autofocus
-                id="name"
-                class="form-control"
-              />
-              <div id="name-error" class="form-error"></div>
+            <!-- First Name -->
+            <div class="edit-form__nested">
+              <div class="edit-form__group">
+                <label class="edit-form__group-label" for="fname"
+                  >First Name</label
+                >
+                <input
+                  type="text"
+                  name="fname"
+                  autofocus
+                  id="fname"
+                  class="form-control"
+                />
+                <div id="fname-error" class="form-error"></div>
+              </div>
+              <div class="edit-form__group">
+                <label class="edit-form__group-label" for="lname"
+                  >Last Name</label
+                >
+                <input
+                  type="text"
+                  name="lname"
+                  autofocus
+                  id="lname"
+                  class="form-control"
+                />
+                <div id="lname-error" class="form-error"></div>
+              </div>
             </div>
 
             <!-- DOB -->

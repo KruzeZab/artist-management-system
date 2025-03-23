@@ -1,4 +1,12 @@
 import bcrypt from 'bcrypt';
+import { PoolClient } from 'pg';
+
+import config from '../config/config';
+
+import {
+  validateUserLogin,
+  validateUserRegister,
+} from '../validators/userValidator';
 
 import { Role, User } from '../interfaces/user';
 import { HttpStatus } from '../interfaces/server';
@@ -6,17 +14,11 @@ import { HttpStatus } from '../interfaces/server';
 import UserModel from '../model/user.model';
 
 import { sendApiResponse } from '../utils/server';
-
-import {
-  validateUserLogin,
-  validateUserRegister,
-} from '../validators/userValidator';
-
-import config from '../config/config';
-import UserService from './user.service';
 import { calculateTokenExpiry, generateToken } from '../utils/token';
+
 import { TOKEN_EXPIRY_HOUR } from '../constants/application';
-import { PoolClient } from 'pg';
+
+import UserService from './user.service';
 import ArtistService from './artist.service';
 
 class AuthService {
@@ -105,7 +107,7 @@ class AuthService {
 
       if (!user) {
         return sendApiResponse({
-          status: HttpStatus.UNAUTHORIZED,
+          status: HttpStatus.BAD_REQUEST,
           success: false,
           response: { success: false, message: 'Invalid email or password' },
         });
@@ -115,7 +117,7 @@ class AuthService {
 
       if (!isPasswordValid) {
         return sendApiResponse({
-          status: HttpStatus.UNAUTHORIZED,
+          status: HttpStatus.BAD_REQUEST,
           success: false,
           response: { success: false, message: 'Invalid email or password' },
         });

@@ -2,11 +2,15 @@ import {
   DEFAULT_PAGE_LIMIT,
   DEFAULT_PAGE_START,
 } from '../constants/pagiantion';
-import { HttpStatus } from '../interfaces/server';
-import { UpdateUser } from '../interfaces/user';
+
 import UserModel from '../model/user.model';
+
+import { HttpStatus } from '../interfaces/server';
+import { Role, UpdateUser } from '../interfaces/user';
+
 import { buildMeta } from '../utils/pagination';
 import { sendApiResponse } from '../utils/server';
+
 import { validateUserUpdate } from '../validators/userValidator';
 
 class UserService {
@@ -70,7 +74,7 @@ class UserService {
       return sendApiResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         success: false,
-        response: { success: false, message: 'Unable to update user' },
+        response: { success: false, message: 'Unable to fetch user' },
       });
     }
   }
@@ -79,15 +83,31 @@ class UserService {
    * Delete a user
    *
    */
-  static async deleteUser(userId: number) {
+  static async deleteUser(userId: number, currentUserId: number) {
     try {
-      const userExists = await UserModel.findUserById(userId);
+      if (userId === currentUserId) {
+        return sendApiResponse({
+          status: HttpStatus.BAD_REQUEST,
+          success: false,
+          response: { success: false, message: 'Cannot delete self' },
+        });
+      }
 
-      if (!userExists) {
+      const existingUser = await UserModel.findUserById(userId);
+
+      if (!existingUser) {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
           success: false,
           response: { success: false, message: 'User not found' },
+        });
+      }
+
+      if (existingUser.role !== Role.ARTIST) {
+        return sendApiResponse({
+          status: HttpStatus.BAD_REQUEST,
+          success: false,
+          response: { success: false, message: 'You are not authorized' },
         });
       }
 
@@ -137,7 +157,7 @@ class UserService {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
           success: false,
-          response: { success: false, message: validationResult.errors },
+          response: { success: false, error: validationResult.errors },
         });
       }
 
@@ -155,7 +175,7 @@ class UserService {
       const data = await UserModel.updateUser(userId, user);
 
       return sendApiResponse({
-        status: HttpStatus.CREATED,
+        status: HttpStatus.OK,
         success: true,
         response: { success: true, data, message: 'User updated!' },
       });
@@ -199,7 +219,7 @@ class UserService {
       const data = await UserModel.updateToken(userId, token, tokenExpiry);
 
       return sendApiResponse({
-        status: HttpStatus.CREATED,
+        status: HttpStatus.OK,
         success: true,
         response: {
           success: true,

@@ -37,7 +37,7 @@ export function injectHeader() {
   const headerHTML = `
     <div class="header__wrapper">
       <div class="header__branding">
-        <p class="header__brand">Artist Management System</p>
+        <a href="/src/pages/index.html" class="header__brand">Artist Management System</a>
         <div class="header__collapse" id="header-collapse">
           <div></div>
           <div></div>

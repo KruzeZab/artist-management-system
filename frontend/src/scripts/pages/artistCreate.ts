@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (!validatePassword(password)) {
       passwordError.textContent =
-        'Password must be at least 6 characters long.';
+        'At least 7 characters long and contain at least one uppercase letter.';
       isValid = false;
     }
     if (!validatePhone(phone)) {

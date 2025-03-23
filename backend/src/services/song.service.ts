@@ -3,18 +3,18 @@ import {
   DEFAULT_PAGE_START,
 } from '../constants/pagiantion';
 
-import { HttpStatus } from '../interfaces/server';
-import { Song, UpdateSong } from '../interfaces/song';
-
-import SongModel from '../model/song.model';
-
-import { buildMeta } from '../utils/pagination';
-import { sendApiResponse } from '../utils/server';
-
 import {
   validateSongRegister,
   validateSongUpdate,
 } from '../validators/songValidator';
+
+import SongModel from '../model/song.model';
+
+import { HttpStatus } from '../interfaces/server';
+import { Song, UpdateSong } from '../interfaces/song';
+
+import { buildMeta } from '../utils/pagination';
+import { sendApiResponse } from '../utils/server';
 
 class SongService {
   /**
@@ -121,7 +121,7 @@ class SongService {
       return sendApiResponse({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         success: false,
-        response: { message: 'Unable to update song' },
+        response: { message: 'Unable to fetch song' },
       });
     }
   }
@@ -147,7 +147,7 @@ class SongService {
       return sendApiResponse({
         status: HttpStatus.OK,
         success: true,
-        response: { data },
+        response: { success: true, message: 'Deleted successfuly!', data },
       });
     } catch (error) {
       console.error('Error deleting song:', error);
@@ -196,7 +196,7 @@ class SongService {
       const data = await SongModel.updateSong(songId, song);
 
       return sendApiResponse({
-        status: HttpStatus.CREATED,
+        status: HttpStatus.OK,
         success: true,
         response: { success: true, data },
       });

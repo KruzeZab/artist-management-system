@@ -110,3 +110,28 @@ img {
 .page-title {
   font-size: 2.4rem;
 }
+
+.d-none {
+  display: none !important;
+}
+
+.d-block {
+  display: block !important;
+}
+
+.d-flex {
+  display: flex !important;
+}
+
+a {
+  color: var(--brand-secondary);
+  transition: var(--transit);
+}
+
+a:hover {
+  color: var(--brand-primary);
+}
+
+.pb-0 {
+  padding-bottom: 0 !important;
+}

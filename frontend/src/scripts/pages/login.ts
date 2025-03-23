@@ -6,8 +6,15 @@ import config from '../../config';
 import { ServerResponse } from '../../interface/response.js';
 import { setItem } from '../utils/localStorage.js';
 import { AUTH } from '../../constants/application.js';
+import { getCurrentUser } from '../utils/user.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+  const isLoggedIn = getCurrentUser();
+
+  if (isLoggedIn) {
+    window.location.href = '/src/pages/index.html';
+  }
+
   const loginForm = document.querySelector('#login-form') as HTMLFormElement;
 
   const loginButton = document.getElementById(
@@ -69,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (response.success) {
           setItem(AUTH, JSON.stringify(response.data));
 
-          window.location.href = '/src/pages/users.html';
+          window.location.href = '/src/pages/index.html';
         } else {
           mainFormError.style.display = 'block';
           mainFormError.textContent = response.message;

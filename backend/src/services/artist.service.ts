@@ -3,6 +3,12 @@ import {
   DEFAULT_PAGE_START,
 } from '../constants/pagiantion';
 
+import {
+  validateUserRegister,
+  validateUserUpdate,
+} from '../validators/userValidator';
+import { validateArtistRegister } from '../validators/artistValidator';
+
 import { HttpStatus } from '../interfaces/server';
 import { Artist, UpdateArtist } from '../interfaces/artist';
 
@@ -10,13 +16,11 @@ import UserModel from '../model/user.model';
 import ArtistModel from '../model/artist.model';
 
 import { buildMeta } from '../utils/pagination';
-import { sendApiResponse } from '../utils/server';
 import { withTransaction } from '../utils/model';
+import { sendApiResponse } from '../utils/server';
 
 import { Role } from '../interfaces/user';
 
-import { validateUserRegister } from '../validators/userValidator';
-import { validateArtistRegister } from '../validators/artistValidator';
 import AuthService from './auth.service';
 
 class ArtistService {
@@ -167,7 +171,7 @@ class ArtistService {
       return sendApiResponse({
         status: HttpStatus.OK,
         success: true,
-        response: { success: true, data },
+        response: { success: true, data, message: 'Artist fetched!' },
       });
     } catch (error) {
       console.error('Error fetching artists:', error);
@@ -192,7 +196,7 @@ class ArtistService {
 
   static async updateArtist(artistId: number, artist: UpdateArtist) {
     try {
-      const userValidation = validateUserRegister(artist);
+      const userValidation = validateUserUpdate(artist);
       const artistValidation = validateArtistRegister(artist);
 
       if (!artistValidation.success || !userValidation.success) {
@@ -201,15 +205,16 @@ class ArtistService {
           success: false,
           response: {
             success: false,
-            error: artistValidation.errors || artistValidation,
+            message: 'Failed to update',
+            error: userValidation.errors || artistValidation.errors,
           },
         });
       }
 
       // check if artist exists
-      const artistExists = await this.findArtistById(artistId);
+      const existingArtist = await this.findArtistById(artistId);
 
-      if (!artistExists) {
+      if (!existingArtist) {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
           success: false,
@@ -218,20 +223,25 @@ class ArtistService {
       }
 
       const data = await withTransaction(async (client) => {
+        const { firstReleaseYear, noOfAlbumsReleased, ...user } = artist;
+
         const artistPayload = {
-          firstReleaseYear: artist.firstReleaseYear,
-          noOfAlbumsReleased: artist.noOfAlbumsReleased,
+          firstReleaseYear,
+          noOfAlbumsReleased,
         };
 
         await ArtistModel.updateArtist(artistId, artistPayload, client);
 
-        const updatedUser = await UserModel.updateUser(artist.userId, artist);
+        const updatedUser = await UserModel.updateUser(
+          existingArtist.user_id,
+          user,
+        );
 
         return updatedUser;
       });
 
       return sendApiResponse({
-        status: HttpStatus.CREATED,
+        status: HttpStatus.OK,
         success: true,
         response: { success: true, data },
       });

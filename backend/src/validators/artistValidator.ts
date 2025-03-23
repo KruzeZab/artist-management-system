@@ -1,8 +1,10 @@
 import { Gender } from '../interfaces/common';
+import { Artist } from '../interfaces/artist';
 import { User, Role, UpdateUser } from '../interfaces/user';
 
+import { validateProperties } from '../utils/object';
+
 import { EMAIL_REGEX, PASSWORD_REGEX } from '../constants/validator';
-import { Artist } from '../interfaces/artist';
 
 /**
  * Validate the body of user registration
@@ -10,6 +12,11 @@ import { Artist } from '../interfaces/artist';
  */
 export function validateArtistRegister(artist: Artist) {
   const errors: string[] = [];
+
+  const allowedKeys = Object.keys({} as Artist) as (keyof Artist)[];
+
+  // Validate extra properties
+  errors.push(...validateProperties(artist, allowedKeys));
 
   if (artist.noOfAlbumsReleased === undefined) {
     errors.push('No of albums released is required.');
@@ -33,13 +40,12 @@ export function validateArtistRegister(artist: Artist) {
 export function validateUserLogin(user: Pick<User, 'email' | 'password'>) {
   const errors: string[] = [];
 
-  const allowedKeys = new Set<keyof User>(Object.keys(user) as (keyof User)[]);
+  const allowedKeys = Object.keys(
+    {} as Pick<User, 'email' | 'password'>,
+  ) as (keyof Pick<User, 'email' | 'password'>)[];
 
-  for (const key in user) {
-    if (!allowedKeys.has(key as keyof User)) {
-      errors.push(`Unexpected property: ${key}`);
-    }
-  }
+  // Validate extra properties
+  errors.push(...validateProperties(user, allowedKeys));
 
   if (!user.email || !EMAIL_REGEX.test(user.email)) {
     errors.push('Invalid email format.');
@@ -58,6 +64,11 @@ export function validateUserLogin(user: Pick<User, 'email' | 'password'>) {
  */
 export function validateUserUpdate(user: UpdateUser) {
   const errors: string[] = [];
+
+  const allowedKeys = Object.keys({} as UpdateUser) as (keyof UpdateUser)[];
+
+  // Validate extra properties
+  errors.push(...validateProperties(user, allowedKeys));
 
   if (user.firstName && user.firstName.trim().length < 2) {
     errors.push('First name must be at least 2 characters long.');

@@ -3,9 +3,9 @@ import { ServerResponse } from 'http';
 import { User } from '../interfaces/user';
 import { HttpStatus, RequestData } from '../interfaces/server';
 
-import { sendResponseToClient } from '../utils/server';
-
 import AuthService from '../services/auth.service';
+
+import { sendResponseToClient } from '../utils/server';
 
 class AuthController {
   /**

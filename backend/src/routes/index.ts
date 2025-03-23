@@ -42,8 +42,11 @@ const routes: Record<string, RouteHandler> = {
         UserController.updateUser(req, res),
       );
     } else if (req.method === DELETE) {
-      checkUserPermission(res, req.user.role, [Role.SUPER_ADMIN], () =>
-        UserController.deleteUser(req, res),
+      checkUserPermission(
+        res,
+        req.user.role,
+        [Role.SUPER_ADMIN, Role.ARTIST_MANAGER],
+        () => UserController.deleteUser(req, res),
       );
     }
   },

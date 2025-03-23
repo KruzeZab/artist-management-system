@@ -4,22 +4,30 @@ import Modal from '../components/modal';
 
 import { GET, DELETE } from '../../constants/methods';
 
-import { buildUrl, interpolate } from '../utils/url';
 import { fetchAPI } from '../utils/fetch';
+import { buildUrl, interpolate } from '../utils/url';
+import { hideForRoles } from '../utils/authorization';
 import { getFullName, mapGender } from '../utils/user';
 
 import {
   DeleteArtistResponse,
   SingleArtistResponse,
 } from '../../interface/response';
+import { Role } from '../../interface/user';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const container = document.querySelector('.container')!;
   const userDetailTitle = document.getElementById('user-detail-title')!;
   const userDetailInfo = document.querySelector('.user-detail__info')!;
+
   const viewSongsBtn = document.querySelector('.page-header__cta')!;
   const editBtn = document.getElementById('user-edit')!;
   const deleteBtn = document.getElementById('user-delete')!;
+  const artistCta = document.querySelector(
+    '.artist-detail-cta',
+  )! as HTMLElement;
+
+  hideForRoles(artistCta, [Role.ARTIST_MANAGER]);
 
   const urlParams = new URLSearchParams(window.location.search);
 
@@ -85,8 +93,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       modalDelete.addEventListener('click', async () => {
         const deleteUrl = buildUrl(
           config.serverUrl,
-          interpolate(config.endpoints.artistDetail, {
-            id: artistId.toString(),
+          interpolate(config.endpoints.userDetail, {
+            id: artistDetails.userId,
           }),
         );
 

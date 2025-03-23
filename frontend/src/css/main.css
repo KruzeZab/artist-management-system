@@ -6,6 +6,17 @@
   border-radius: 10px;
 }
 
+.table-error,
+.table-empty {
+  font-size: 1.6rem;
+  text-align: center;
+  width: 100%;
+}
+
+.table-error {
+  color: red;
+}
+
 thead {
   border-top: 1px solid var(--bg-grey);
   color: rgb(102 102 102);
@@ -113,25 +124,9 @@ td {
   display: none;
 }
 
-.table-error,
-.table-empty {
-  font-size: 1.6rem;
-  text-align: center;
-  width: 100%;
-}
-
-.table-error {
-  color: red;
-}
-
 .pagination {
-  /* padding: 0 1rem; */
-
-  /* margin: 1rem 0; */
   display: flex;
   gap: 0.5rem;
-
-  /* padding-bottom: 1rem; */
   justify-content: flex-end;
 }
 
@@ -140,14 +135,7 @@ td {
   background-color: var(--brand-secondary);
   font-size: 1.4rem;
   color: var(--white);
-}
-
-.d-block {
-  display: block !important;
-}
-
-.pb-0 {
-  padding-bottom: 0 !important;
+  margin: 1rem;
 }
 
 /* Header */
@@ -224,14 +212,6 @@ header {
   }
 }
 
-.d-none {
-  display: none !important;
-}
-
-.d-flex {
-  display: flex !important;
-}
-
 .footer {
   background-color: var(--white);
   width: 100%;
@@ -239,15 +219,6 @@ header {
   position: fixed;
   bottom: 0;
   text-align: center;
-}
-
-a {
-  color: var(--brand-secondary);
-  transition: var(--transit);
-}
-
-a:hover {
-  color: var(--brand-primary);
 }
 
 .footer__text {
@@ -269,4 +240,56 @@ a:hover {
 
 .header__btn {
   padding: 0.8rem 1rem;
+}
+
+.edit-form {
+  background-color: var(--white);
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-bottom: 1rem;
+}
+
+.edit-form-wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(100vh - 15rem);
+  padding: 0 1.5rem;
+}
+
+.user-edit-header {
+  border-bottom: 1px solid var(--bg-grey);
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.user-list-header {
+  padding: 0 1rem;
+  margin-top: 4rem;
+}
+
+.edit-form__group {
+  width: 100%;
+}
+
+.edit-form__nested {
+  display: flex;
+  gap: 1rem;
+}
+
+.edit-form__group-label {
+  font-size: 1.4rem;
+}
+
+.edit-form__cta {
+  padding: 1rem;
+}
+
+.view-btn {
+  padding: 0.6rem 0.4rem;
+  font-size: 1.4rem;
+  color: var(--brand-secondary);
 }

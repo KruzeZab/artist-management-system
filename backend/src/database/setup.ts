@@ -1,6 +1,6 @@
-import { Client } from 'pg';
 import fs from 'fs';
 import path from 'path';
+import { Client } from 'pg';
 import dotenv from 'dotenv';
 
 import config from '../config/config';

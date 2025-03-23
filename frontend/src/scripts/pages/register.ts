@@ -18,8 +18,10 @@ import {
 
 import { Role } from '../../interface/user';
 import { ServerResponse } from '../../interface/response';
+import { getCurrentUser } from '../utils/user';
 
 document.addEventListener('DOMContentLoaded', () => {
+  const isLoggedIn = getCurrentUser();
   // Assign default role
   const urlParams = new URLSearchParams(window.location.search);
   const defaultRole = urlParams.get('role') || Role.SUPER_ADMIN;
@@ -38,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
 
     registerButton.disabled = true;
-    registerButton.textContent = 'Registering...';
+    registerButton.textContent = 'Submitting...';
 
     const fnameInput = document.getElementById('fname') as HTMLInputElement;
     const lnameInput = document.getElementById('lname') as HTMLInputElement;
@@ -108,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (!validatePassword(password)) {
       passwordError.textContent =
-        'Password must be at least 6 characters long.';
+        'At least 7 characters long and contain at least one uppercase letter.';
       isValid = false;
     }
     if (!validatePhone(phone)) {
@@ -159,6 +161,9 @@ document.addEventListener('DOMContentLoaded', () => {
         );
 
         if (response.success) {
+          if (isLoggedIn) {
+            window.location.href = '/src/pages/index.html';
+          }
           window.location.href = '/src/pages/login.html';
         } else {
           mainFormError.style.display = 'block';
@@ -169,11 +174,11 @@ document.addEventListener('DOMContentLoaded', () => {
         mainFormError.textContent = 'Something went wrong!';
       } finally {
         registerButton.disabled = false;
-        registerButton.textContent = 'Signup';
+        registerButton.textContent = 'Submit';
       }
     } else {
       registerButton.disabled = false;
-      registerButton.textContent = 'Signup';
+      registerButton.textContent = 'Submit';
     }
   });
 });

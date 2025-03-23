@@ -1,16 +1,17 @@
 import url from 'url';
 import { IncomingMessage, ServerResponse } from 'http';
 
-import routes from '../routes';
-
-import { GET } from '../constants/methods';
-
 import {
   findRoute,
   handleCors,
   isProtectedRoute,
   sendResponseToClient,
 } from '../utils/server';
+
+import routes from '../routes';
+
+import { GET } from '../constants/methods';
+
 import { parseQueryParams } from '../utils/string';
 
 import { authenticate } from '../middlewares/auth';

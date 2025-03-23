@@ -19,7 +19,7 @@ export const checkUserPermission = (
     return next();
   }
 
-  return sendResponseToClient(res, HttpStatus.UNAUTHORIZED, {
+  return sendResponseToClient(res, HttpStatus.FORBIDDEN, {
     success: false,
     message: 'You are not authorized',
   });

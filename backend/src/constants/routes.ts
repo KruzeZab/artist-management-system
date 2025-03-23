@@ -1,4 +1,4 @@
-export const protectedRoutes = [
+export const PROTECTED_ROUTES = [
   'users',
   'users/:id',
   'artists',
@@ -11,7 +11,7 @@ export const protectedRoutes = [
   'songs',
 ];
 
-export const publicRoutes = ['users/register', 'users/login'];
+export const PUBLIC_ROUTES = ['users/register', 'users/login'];
 
 export const DYNAMIC_ROUTE_PARAM_REGEX = /:([^/]+)/g;
 export const DYNAMIC_ROUTE_REPLACE_REGEX = '([^/]+)';

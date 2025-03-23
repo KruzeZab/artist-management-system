@@ -7,6 +7,9 @@ WORKDIR /app
 # Copy package.json and yarn.lock first for caching
 COPY package.json yarn.lock ./
 
+# Copy sql file
+COPY src/database/init.sql /app/build/database/init.sql
+
 # Install dependencies
 RUN yarn install --frozen-lockfile
 

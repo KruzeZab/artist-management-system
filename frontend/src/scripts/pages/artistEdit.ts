@@ -1,7 +1,7 @@
 import config from '../../config';
 
 import { fetchAPI } from '../utils/fetch';
-import { formatDateForInput } from '../utils/user';
+import { formatDateForInput, getFullName } from '../utils/user';
 import { buildUrl, interpolate } from '../utils/url';
 
 import { Gender } from '../../interface/user';
@@ -59,10 +59,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         '<p class="error-message">Failed to fetch artist details.</p>';
       return;
     }
-    userDetailTitle.textContent = `Edit ${artistDetails.name}'s Detail`;
+    userDetailTitle.textContent = `Edit ${getFullName(artistDetails.firstName, artistDetails.lastName)}'s Detail`;
 
-    (document.getElementById('name') as HTMLInputElement).value =
-      artistDetails.name;
+    (document.getElementById('fname') as HTMLInputElement).value =
+      artistDetails.firstName;
+
+    (document.getElementById('lname') as HTMLInputElement).value =
+      artistDetails.lastName;
 
     (document.getElementById('dob') as HTMLInputElement).value =
       formatDateForInput(artistDetails.dob);
@@ -81,8 +84,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       event.preventDefault();
 
       const updatedArtist: UpdateArtist = {
-        name: (
-          document.getElementById('name') as HTMLInputElement
+        firstName: (
+          document.getElementById('fname') as HTMLInputElement
+        ).value.trim(),
+        lastName: (
+          document.getElementById('lname') as HTMLInputElement
         ).value.trim(),
 
         dob: (document.getElementById('dob') as HTMLInputElement).value,
@@ -107,7 +113,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       let isValid = true;
 
-      const nameError = document.getElementById('name-error')!;
+      const fnameError = document.getElementById('fname-error')!;
+      const lnameError = document.getElementById('lname-error')!;
       const dobError = document.getElementById('dob-error')!;
       const genderError = document.getElementById('gender-error')!;
       const addressError = document.getElementById('address-error')!;
@@ -118,15 +125,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         'albums-released-error',
       )!;
 
-      nameError.textContent = '';
+      fnameError.textContent = '';
+      lnameError.textContent = '';
       dobError.textContent = '';
       addressError.textContent = '';
       genderError.textContent = '';
       firstReleaseYearError.textContent = '';
       albumsReleasedrror.textContent = '';
 
-      if (!validateName(updatedArtist.name)) {
-        nameError.textContent = 'Name must be at least 2 characters long';
+      if (!validateName(updatedArtist.firstName)) {
+        fnameError.textContent =
+          'First Name must be at least 2 characters long';
+        isValid = false;
+      }
+
+      if (!validateName(updatedArtist.lastName)) {
+        lnameError.textContent = 'Last Name must be at least 2 characters long';
         isValid = false;
       }
 

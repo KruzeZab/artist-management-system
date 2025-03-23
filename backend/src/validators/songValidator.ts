@@ -1,4 +1,5 @@
 import { Genre, Song, UpdateSong } from '../interfaces/song';
+import { validateProperties } from '../utils/object';
 
 /**
  * Validate the body of song registration
@@ -6,6 +7,11 @@ import { Genre, Song, UpdateSong } from '../interfaces/song';
  */
 export function validateSongRegister(song: Song) {
   const errors: string[] = [];
+
+  const allowedKeys = Object.keys({} as Song) as (keyof Song)[];
+
+  // Validate extra properties
+  errors.push(...validateProperties(song, allowedKeys));
 
   if (!song.title || !song.title.trim()) {
     errors.push('Song title is required');
@@ -40,6 +46,11 @@ export function validateSongRegister(song: Song) {
  */
 export function validateSongUpdate(song: UpdateSong) {
   const errors: string[] = [];
+
+  const allowedKeys = Object.keys({} as UpdateSong) as (keyof UpdateSong)[];
+
+  // Validate extra properties
+  errors.push(...validateProperties(song, allowedKeys));
 
   if (song.title && song.title.length < 4) {
     errors.push('Song title imust be at least 4 characters long');

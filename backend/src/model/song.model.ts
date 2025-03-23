@@ -1,11 +1,13 @@
 import { pool } from '../config/dbConfig';
+
 import {
   DEFAULT_PAGE_LIMIT,
   DEFAULT_PAGE_START,
 } from '../constants/pagiantion';
-import { Song, UpdateSong } from '../interfaces/song';
 
 import { camelToSnake } from '../utils/common';
+
+import { Song, UpdateSong } from '../interfaces/song';
 
 class SongModel {
   /**
@@ -121,6 +123,7 @@ class SongModel {
       };
     } catch (error) {
       console.error('Error retrieving songs:', error);
+
       throw new Error('Failed to fetch songs');
     }
   }
@@ -136,10 +139,8 @@ class SongModel {
       throw new Error('No fields provided for update');
     }
 
-    // Convert camelCase keys to snake_case for PostgreSQL
     fields = fields.map(camelToSnake);
 
-    // Add updated_at field to be updated
     fields.push('updated_at');
 
     const values = [...Object.values(updates), new Date(), songId];
@@ -190,6 +191,7 @@ class SongModel {
       return result.rows[0].id;
     } catch (error) {
       console.error('Error deleting song:', error);
+
       throw new Error('Song deletion failed');
     }
   }

@@ -1,11 +1,16 @@
 import { ServerResponse } from 'http';
+
+import {
+  DEFAULT_PAGE_LIMIT,
+  DEFAULT_PAGE_START,
+} from '../constants/pagiantion';
+
+import { Artist } from '../interfaces/artist';
 import { HttpStatus, RequestData } from '../interfaces/server';
 
 import { sendResponseToClient } from '../utils/server';
 
 import ArtistService from '../services/artist.service';
-
-import { Artist } from '../interfaces/artist';
 
 class ArtistController {
   /**
@@ -35,8 +40,10 @@ class ArtistController {
    */
   static async getAllArtists(req: RequestData, res: ServerResponse) {
     try {
-      const page = parseInt(req.queryString.page as string, 10) || 1;
-      const limit = parseInt(req.queryString.limit as string, 10) || 10;
+      const page =
+        parseInt(req.queryString.page as string, 10) || DEFAULT_PAGE_START;
+      const limit =
+        parseInt(req.queryString.limit as string, 10) || DEFAULT_PAGE_LIMIT;
 
       const { response } = await ArtistService.getAllArtists(page, limit);
 

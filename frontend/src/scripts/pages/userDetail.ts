@@ -11,9 +11,10 @@ import {
 
 import { buildUrl, interpolate } from '../utils/url';
 import { fetchAPI } from '../utils/fetch';
-import { mapGender, mapRole } from '../utils/user';
+import { getCurrentUser, mapGender, mapRole } from '../utils/user';
 
 document.addEventListener('DOMContentLoaded', async () => {
+  const currentUser = getCurrentUser();
   const container = document.querySelector('.container')!;
   const userDetailTitle = document.getElementById('user-detail-title')!;
   const userDetailInfo = document.querySelector('.user-detail__info')!;
@@ -24,6 +25,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   const userId = parseInt(urlParams.get('id') || '', 10);
 
   editBtn.setAttribute('href', `/src/pages/user-edit.html?id=${userId}`);
+
+  if (currentUser?.id === userId) {
+    deleteBtn.classList.add('d-none');
+  }
 
   if (!userId) {
     console.error('User ID is missing or invalid');

@@ -6,6 +6,10 @@ export const camelToSnake = (str: string): string => {
   return str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
 };
 
+/**
+ * Convert snake case to camel case
+ *
+ */
 export function snakeToCamel<T>(obj: T): T {
   if (typeof obj !== 'object' || obj === null) {
     return obj;

@@ -1,16 +1,18 @@
 import { ServerResponse } from 'http';
 
-import { Song } from '../interfaces/song';
-import { Role } from '../interfaces/user';
-import { HttpStatus, RequestData } from '../interfaces/server';
-
-import { sendResponseToClient } from '../utils/server';
-
-import SongService from '../services/song.service';
 import {
   DEFAULT_PAGE_LIMIT,
   DEFAULT_PAGE_START,
 } from '../constants/pagiantion';
+
+import { Song } from '../interfaces/song';
+import { Role } from '../interfaces/user';
+import { HttpStatus, RequestData } from '../interfaces/server';
+
+import SongService from '../services/song.service';
+import ArtistService from '../services/artist.service';
+
+import { sendResponseToClient } from '../utils/server';
 
 class SongController {
   /**
@@ -42,6 +44,8 @@ class SongController {
     try {
       const role = req.user.role;
 
+      const artist = await ArtistService.findArtistByUserId(req.user.id);
+
       const page =
         parseInt(req.queryString.page as string, 10) || DEFAULT_PAGE_START;
       const limit =
@@ -50,7 +54,7 @@ class SongController {
       let artistId: number | undefined;
 
       if (role !== Role.SUPER_ADMIN) {
-        artistId = req.user.artistId;
+        artistId = artist.artist_id;
       } else {
         const artistIdParam = req.queryString.artistId as string;
         artistId = artistIdParam ? parseInt(artistIdParam, 10) : undefined;
@@ -99,7 +103,7 @@ class SongController {
    */
   static async deleteSong(req: RequestData, res: ServerResponse) {
     try {
-      const songId = Number(req.routeParams?.id);
+      const songId = Number(req.routeParams?.songId);
 
       const data = await SongService.deleteSong(songId);
 

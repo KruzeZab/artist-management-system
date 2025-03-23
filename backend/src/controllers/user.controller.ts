@@ -1,7 +1,14 @@
 import { ServerResponse } from 'http';
+
+import {
+  DEFAULT_PAGE_LIMIT,
+  DEFAULT_PAGE_START,
+} from '../constants/pagiantion';
+
 import { HttpStatus, RequestData } from '../interfaces/server';
 
 import UserService from '../services/user.service';
+
 import { sendResponseToClient } from '../utils/server';
 
 class UserController {
@@ -11,8 +18,10 @@ class UserController {
    */
   static async getAllUsers(req: RequestData, res: ServerResponse) {
     try {
-      const page = parseInt(req.queryString.page as string, 10) || 1;
-      const limit = parseInt(req.queryString.limit as string, 10) || 10;
+      const page =
+        parseInt(req.queryString.page as string, 10) || DEFAULT_PAGE_START;
+      const limit =
+        parseInt(req.queryString.limit as string, 10) || DEFAULT_PAGE_LIMIT;
 
       const { response } = await UserService.getAllUsers(page, limit);
 
@@ -60,8 +69,9 @@ class UserController {
   static async deleteUser(req: RequestData, res: ServerResponse) {
     try {
       const userId = Number(req.routeParams?.id);
+      const currentUserId = req.user.id;
 
-      const data = await UserService.deleteUser(userId);
+      const data = await UserService.deleteUser(userId, currentUserId);
 
       sendResponseToClient(res, data.status, data.response);
     } catch (error) {

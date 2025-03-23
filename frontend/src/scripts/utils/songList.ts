@@ -70,7 +70,7 @@ export function updateSongsTable(
 
   songs.forEach((song, index) => {
     const row = document.createElement('tr');
-    const songDetailLink = `/src/pages/song-detail.html?songId=${song.id}`;
+    const songDetailLink = `/src/pages/song-detail.html?songId=${song.id}&artistId=${song.artistId}`;
     row.innerHTML = `
       <td>${(page - 1) * limit + index + 1}</td>
       <td><a href="${songDetailLink}">${song.title}</a></td>

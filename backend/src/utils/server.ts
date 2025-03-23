@@ -4,8 +4,8 @@ import { HttpStatus, RouteHandler } from '../interfaces/server';
 import {
   DYNAMIC_ROUTE_PARAM_REGEX,
   DYNAMIC_ROUTE_REPLACE_REGEX,
-  protectedRoutes,
-  publicRoutes,
+  PROTECTED_ROUTES,
+  PUBLIC_ROUTES,
 } from '../constants/routes';
 import { snakeToCamel } from './common';
 
@@ -89,11 +89,11 @@ export const findRoute = (
  *
  */
 export const isProtectedRoute = (path: string) => {
-  if (publicRoutes.includes(path)) {
+  if (PUBLIC_ROUTES.includes(path)) {
     return false;
   }
 
-  return protectedRoutes.some((protectedPath) => {
+  return PROTECTED_ROUTES.some((protectedPath) => {
     const protectedSegments = protectedPath.split('/');
     const pathSegments = path.split('/');
 
@@ -114,14 +114,21 @@ export const isProtectedRoute = (path: string) => {
 export const handleCors = (req: IncomingMessage, res: ServerResponse) => {
   const origin = req.headers.origin || '';
 
-  // Set CORS headers
-  res.setHeader('Access-Control-Allow-Origin', origin);
+  const allowedOrigins = [/^http:\/\/localhost:\d+$/];
+
+  // Check if the origin matches any of the allowed patterns
+  const isAllowed = allowedOrigins.some((pattern) => pattern.test(origin));
+
+  if (isAllowed) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+  }
+
   res.setHeader(
     'Access-Control-Allow-Methods',
     'GET, POST, PATCH, DELETE, PUT, OPTIONS',
   );
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
 
   // If it's an OPTIONS request, respond immediately
   if (req.method === 'OPTIONS') {

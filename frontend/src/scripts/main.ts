@@ -1,6 +1,3 @@
-import '../css/base.css';
-import '../css/main.css';
-
 import { injectHeader } from './components/header';
 
 import { ELEMENT_ROLE_MAPPING } from '../constants/permission';

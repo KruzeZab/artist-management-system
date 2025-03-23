@@ -1,13 +1,15 @@
 import { PoolClient } from 'pg';
 
-import { pool } from '../config/dbConfig';
 import {
   DEFAULT_PAGE_LIMIT,
   DEFAULT_PAGE_START,
 } from '../constants/pagiantion';
-import { Artist, UpdateArtist } from '../interfaces/artist';
+
+import { pool } from '../config/dbConfig';
 
 import { camelToSnake } from '../utils/common';
+
+import { Artist, UpdateArtist } from '../interfaces/artist';
 
 class ArtistModel {
   /**
@@ -155,10 +157,8 @@ class ArtistModel {
       throw new Error('No fields provided for update');
     }
 
-    // Convert camelCase keys to snake_case for PostgreSQL
     fields = fields.map(camelToSnake);
 
-    // Add updated_at field to be updated
     fields.push('updated_at');
 
     const values = [...Object.values(updates), new Date(), artistId];

@@ -1,0 +1,28 @@
+.dashboard {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  min-height: calc(100vh - 40rem);
+}
+
+.dashboard__image img {
+  width: 400px;
+  height: 200px;
+}
+
+.dashboard__title {
+  font-size: 2rem;
+  color: var(--brand-secondary);
+  text-align: center;
+}
+
+.dashboard__content {
+  color: var(--text-secondary);
+  font-size: 1.6rem;
+  max-width: 80%;
+  text-align: center;
+  margin: 0 auto;
+}
