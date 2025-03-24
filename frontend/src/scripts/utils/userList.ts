@@ -81,9 +81,13 @@ export function updateUserTable(
 
   if (isNextBtnDisabled) {
     nextButton.classList.add('d-none');
+  } else {
+    nextButton.classList.remove('d-none');
   }
 
   if (isPrevBtnDisabled) {
     prevButton.classList.add('d-none');
+  } else {
+    prevButton.classList.remove('d-none');
   }
 }

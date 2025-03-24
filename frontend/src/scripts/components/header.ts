@@ -18,6 +18,7 @@ export function injectHeader() {
   let userLinks = '';
 
   if (currentUser) {
+    userLinks += `<li><p class="header__item">Welcome ${currentUser.email}</p></li>`;
     if (currentUser.role === Role.SUPER_ADMIN) {
       userLinks += `<li><a href="/src/pages/user-list.html" class="header__item">Users</a></li>`;
       userLinks += `<li><a href="/src/pages/artist-list.html" class="header__item">Artists</a></li>`;
