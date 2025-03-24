@@ -93,6 +93,8 @@ class UserService {
         });
       }
 
+      const currentUser = await this.findUserById(currentUserId);
+
       const existingUser = await UserModel.findUserById(userId);
 
       if (!existingUser) {
@@ -103,7 +105,7 @@ class UserService {
         });
       }
 
-      if (existingUser.role !== Role.ARTIST) {
+      if (currentUser.role === Role.ARTIST) {
         return sendApiResponse({
           status: HttpStatus.BAD_REQUEST,
           success: false,

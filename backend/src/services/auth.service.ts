@@ -129,8 +129,6 @@ class AuthService {
 
       const data = await UserService.updateToken(user.id, token, tokenExpiry);
 
-      console.log(data, 'this is data');
-
       let apiResponse = {
         role: data.response.role,
         firstName: data.response.first_name,
