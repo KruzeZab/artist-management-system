@@ -42,27 +42,21 @@ https://jam.dev/c/affec2c1-f010-440f-b94c-ac56a80579d2
 
 1.  **Clone the repository**:
 
-bash
-
-CopyEdit
-
-`git clone git@github.com:KruzeZab/artist-management-system.git`
+```
+git clone git@github.com:KruzeZab/artist-management-system.git`
+```
 
 2.  **Navigate to the project directory**:
 
-bash
-
-CopyEdit
-
-`cd artist-management-system`
+```
+cd artist-management-system`
+```
 
 3.  **Run the backend and database with Docker**:
 
-bash
-
-CopyEdit
-
-`docker compose up`
+```
+docker compose up
+```
 
 This will start the backend server and PostgreSQL database.
 
@@ -70,24 +64,20 @@ This will start the backend server and PostgreSQL database.
 
 1.  **Navigate to the frontend directory**:
 
-bash
-
-`cd frontend`
+```
+cd frontend
+```
 
 2.  **Install dependencies**:
 
-bash
-
-CopyEdit
-
-`yarn install`
+```
+yarn install
+```
 
 3.  **Build the frontend**:
 
-bash
-
-CopyEdit
-
-`yarn build`
+```
+yarn build
+```
 
 4.  **Serve the frontend**: After building, you can serve the frontend from the `/dist` folder using a static file server or open the files directly in your browser.
