@@ -20,6 +20,8 @@ https://jam.dev/c/affec2c1-f010-440f-b94c-ac56a80579d2
 
 - **Role-Based Access Control**: Only users with appropriate roles (Super Admin, Artist Manager, Artist) can perform certain actions.
 
+- **Husky Eslint Prettier For Linting**: Used for linting code and pre-commit hook.
+
 ## Technologies Used
 
 - **Backend**: Node.js (Vanilla JS)
